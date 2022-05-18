@@ -23,7 +23,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release -o /home/runner/deliveryvesg1/bin/Debug/net6.0/deliveryvesg1.dll
+        run: dotnet build --configuration Release -o ${{env.DOTNET_ROOT}}
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}
