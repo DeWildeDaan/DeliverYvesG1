@@ -19,3 +19,8 @@ C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\de
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\ref\deliveryvesg1.dll
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\deliveryvesg1.pdb
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\deliveryvesg1.genruntimeconfig.cache
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Azure.Core.dll
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Azure.Data.Tables.dll
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\System.Memory.Data.dll
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\deliveryvesg1.csproj.CopyComplete
