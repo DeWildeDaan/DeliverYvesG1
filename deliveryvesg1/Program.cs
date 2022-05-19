@@ -31,6 +31,12 @@ app.MapGet("/racksbycustomerid/{id}", (IRackService rackService, string id) =>
     return Results.Ok(results);
 });
 
+app.MapGet("/restock/{rackid}", (IRackService rackService, string rackid) =>
+{
+    var results = rackService.RestockRack(rackid);
+    return Results.Ok(results);
+});
+
 app.MapPost("/racks", (IRackService rackService, Rack rack) =>
 {
     var results = rackService.AddRack(rack);
@@ -44,18 +50,18 @@ app.MapDelete("/racks/{rackid}/{customerid}", (IRackService rackService, string 
     return Results.Ok(results);
 });
 
-app.MapPost("/restock", (IRackService rackService, Rack rack) =>
-{
-    var results = rackService.RestockRack(rack);
-    return Results.Created($"/racksbyrackid/{rack.RackId}", results);
-});
-
 
 //PREDICTIONS ENDPOINTS
-app.MapPost("/prediction", (IPredictionService predictionService, Prediction prediction) =>
+app.MapPost("/prediction", (IPredictionService predictionService, InputData inputData) =>
 {
-    var results = predictionService.AddPrediction(prediction);
-    return Results.Created($"/predictions/{prediction.RackId}", results);
+    var results = predictionService.AddPrediction(inputData);
+    return Results.Created($"/predictions/{inputData.RackId}", results);
+});
+
+app.MapGet("/reloadmodel", (IPredictionService predictionService) =>
+{
+    var results = "reloaded";
+    return Results.Ok(results);
 });
 
 app.Run("http://localhost:3000");

@@ -2,7 +2,7 @@ namespace DeliverYves.Services;
 
 public interface IPredictionService
 {
-    Prediction AddPrediction(Prediction newPrediction);
+    Prediction AddPrediction(InputData inputData);
 }
 
 public class PredictionService : IPredictionService
@@ -14,8 +14,9 @@ public class PredictionService : IPredictionService
         _predictionRepository = predictionRepository;
     }
 
-    public Prediction AddPrediction(Prediction newPrediction)
+    public Prediction AddPrediction(InputData inputData)
     {
-        return _predictionRepository.AddPrediction(newPrediction);
+        Prediction prediction = new Prediction(){};
+        return prediction;
     }
 }

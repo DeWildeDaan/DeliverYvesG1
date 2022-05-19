@@ -4,7 +4,7 @@ public interface IRackService
 {
     Rack AddRack(Rack newRack);
     Rack DeleteRack(Rack rack);
-    Rack RestockRack(Rack rack);
+    TableEntity RestockRack(string rackId);
     Pageable<TableEntity> GetRacks();
     Pageable<TableEntity> GetRacksByCustomerId(string customerId);
     Pageable<TableEntity> GetRacksByRackId(string rackId);
@@ -44,9 +44,9 @@ public class RackService : IRackService
         return _rackRepository.DeleteRack(rack);
     }
 
-    public Rack RestockRack(Rack rack)
+    public TableEntity RestockRack(string rackId)
     {
 
-        return _rackRepository.RestockRack(rack);
+        return _rackRepository.RestockRack(rackId);
     }
 }

@@ -4,7 +4,7 @@ public interface IRackRespository
 {
     Rack AddRack(Rack newRack);
     Rack DeleteRack(Rack rack);
-    Rack RestockRack(Rack rack);
+    TableEntity RestockRack(string rackId);
     Pageable<TableEntity> GetRacks();
     Pageable<TableEntity> GetRacksByCustomerId(string customerId);
     Pageable<TableEntity> GetRacksByRackId(string rackId);
@@ -54,17 +54,23 @@ public class RackRespository : IRackRespository
         return rack;
     }
 
-    public Rack RestockRack(Rack rack)
+    public TableEntity RestockRack(string rackId)
     {
-        rack.FilledOn = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-        var entity = new TableEntity(rack.RackId, rack.CustomerId)
+        string customerId = "";
+        Pageable<TableEntity> entities = GetRacksByRackId(rackId);
+        foreach (TableEntity entity in entities)
         {
-            { "RackId", rack.RackId },
-            { "CustomerId", rack.CustomerId },
-            { "FilledOn", rack.FilledOn}
+            customerId = entity.GetString("CustomerId");
+        }
+
+        var newRack = new TableEntity(rackId, customerId)
+        {
+            { "RackId", rackId },
+            { "CustomerId", customerId },
+            { "FilledOn", DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)}
         };
-        _tableClient.UpdateEntity(entity, ETag.All, TableUpdateMode.Replace);
-        return rack;
+        _tableClient.UpdateEntity(newRack, ETag.All, TableUpdateMode.Replace);
+        return newRack;
     }
 
 }
