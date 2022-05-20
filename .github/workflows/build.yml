@@ -34,7 +34,7 @@ jobs:
     
     steps:
     - name: Build API
-      run: |
+      run:
         dotnet build ./deliveryvesg1/deliveryvesg1.csproj --configuration Release  
         dotnet publish  ./deliveryvesg1/deliveryvesg1.csproj -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
         
