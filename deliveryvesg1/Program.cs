@@ -64,4 +64,5 @@ app.MapGet("/reloadmodel", (IPredictionService predictionService) =>
     return Results.Ok(results);
 });
 
-app.Run("http://localhost:3000");
+//app.Run("http://localhost:3000");
+app.Run();
