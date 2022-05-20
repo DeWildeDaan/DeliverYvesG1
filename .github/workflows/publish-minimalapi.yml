@@ -1,0 +1,45 @@
+name: Docker Build and Push to GHCR
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events
+  push:
+    branches: [MINIMALAPI]
+  pull_request:
+    branches: [MINIMALAPI]
+
+  # Manual trigger
+  workflow_dispatch:
+
+jobs:
+  docker-build-and-push:
+    runs-on: ubuntu-latest # Machines from GitHub
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v2 # Download the code
+
+      - name: Docker Meta Information
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/dewildedaan/deliveryvesg1minimalapi
+          tags: |
+            type=ref,event=branch
+            type=sha
+      - name: Login to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./deliveryvesg1
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
