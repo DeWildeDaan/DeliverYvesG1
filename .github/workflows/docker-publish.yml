@@ -14,7 +14,8 @@ on:
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest # Machines from GitHub
-
+    permissions:
+      packages: write
     steps:
       - uses: actions/checkout@v2 # Download the code
 
