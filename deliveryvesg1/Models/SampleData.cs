@@ -3,6 +3,7 @@ public class SampleData
 {
     public String RackId { get; set; }
     public int RackRow { get; set; }
+    public int Label { get; set; }
     public float WeightPre { get; set; }
     public float WeightPost { get; set; }
     public float WeightDiff { get; set; }

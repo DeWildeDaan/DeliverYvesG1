@@ -35,6 +35,8 @@ app.MapPost("/sampledata", (ISampleDataService sampleDataService, SampleData sam
 //RACKS ENDPOINTS
 app.MapGet("/racks", (IRackService rackService) => rackService.GetRacks());
 
+app.MapGet("/nocustomer", (IRackService rackService) => rackService.GetRacksNoCustomerId());
+
 app.MapGet("/racksbyrackid/{id}", (IRackService rackService, string id) =>
 {
     var results = rackService.GetRacksByRackId(id);
@@ -53,16 +55,21 @@ app.MapGet("/restock/{rackid}", (IRackService rackService, string rackid) =>
     return Results.Ok(results);
 });
 
-app.MapPost("/racks", (IRackService rackService, Rack rack) =>
+app.MapPost("/racks", (IRackService rackService) =>
 {
-    var results = rackService.AddRack(rack);
-    return Results.Created($"/racksbyrackid/{rack.RackId}", results);
+    var results = rackService.AddRack();
+    return Results.Created($"/racks", results);
 });
 
-app.MapDelete("/racks/{rackid}/{customerid}", (IRackService rackService, string rackid, string customerid) =>
+app.MapPut("/racks", (IRackService rackService, Rack rack) =>
 {
-    Rack rack = new Rack() { RackId = rackid, CustomerId = customerid };
-    var results = rackService.DeleteRack(rack);
+    var results = rackService.UpdateRack(rack);
+    return Results.Accepted($"/racksbyrackid/{rack.RackId}", results);
+});
+
+app.MapDelete("/racks/{rackid}", (IRackService rackService, string rackid) =>
+{
+    var results = rackService.DeleteRack(rackid);
     return Results.Ok(results);
 });
 
@@ -74,7 +81,7 @@ app.MapGet("/reloadmodel", (IPredictionService predictionService) =>
     return Results.Ok(results);
 });
 
-app.MapGet("/predictions", (IPredictionService predictionService) =>
+app.MapGet("/predictions/", (IPredictionService predictionService) =>
 {
     var results = 0;
     return Results.Ok(results);

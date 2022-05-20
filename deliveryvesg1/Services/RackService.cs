@@ -2,10 +2,12 @@ namespace DeliverYves.Services;
 
 public interface IRackService
 {
-    Rack AddRack(Rack newRack);
-    Rack DeleteRack(Rack rack);
+    Rack AddRack();
+    string DeleteRack(string rackId);
     TableEntity RestockRack(string rackId);
+    TableEntity UpdateRack(Rack newRack);
     Pageable<TableEntity> GetRacks();
+    Pageable<TableEntity> GetRacksNoCustomerId();
     Pageable<TableEntity> GetRacksByCustomerId(string customerId);
     Pageable<TableEntity> GetRacksByRackId(string rackId);
 }
@@ -24,6 +26,11 @@ public class RackService : IRackService
         return _rackRepository.GetRacks();
     }
 
+    public Pageable<TableEntity> GetRacksNoCustomerId()
+    {
+        return _rackRepository.GetRacksNoCustomerId();
+    }
+
     public Pageable<TableEntity> GetRacksByRackId(string rackId)
     {
         return _rackRepository.GetRacksByRackId(rackId);
@@ -34,14 +41,20 @@ public class RackService : IRackService
         return _rackRepository.GetRacksByCustomerId(customerId);
     }
 
-    public Rack AddRack(Rack newRack)
+    public Rack AddRack()
     {
-        return _rackRepository.AddRack(newRack);
+        return _rackRepository.AddRack();
     }
 
-    public Rack DeleteRack(Rack rack)
+    public string DeleteRack(string rackId)
     {
-        return _rackRepository.DeleteRack(rack);
+        return _rackRepository.DeleteRack(rackId);
+    }
+
+    public TableEntity UpdateRack(Rack newRack)
+    {
+
+        return _rackRepository.UpdateRack(newRack);
     }
 
     public TableEntity RestockRack(string rackId)

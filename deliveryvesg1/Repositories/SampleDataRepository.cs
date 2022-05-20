@@ -26,6 +26,7 @@ public class SampleDataRespository : ISampleDataRespository
         var entity = new TableEntity(sampleData.RackId, registrationid)
         {
             { "RackRow", sampleData.RackRow },
+            { "Label", sampleData.Label },
             { "WeightPre", sampleData.WeightPre },
             { "WeightPost", sampleData.WeightPost },
             { "WeightDiff", sampleData.WeightDiff },
