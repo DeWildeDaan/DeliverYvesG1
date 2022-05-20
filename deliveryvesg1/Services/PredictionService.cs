@@ -2,7 +2,7 @@ namespace DeliverYves.Services;
 
 public interface IPredictionService
 {
-    Prediction AddPrediction(InputData inputData);
+    Task<Prediction> AddPrediction(InputData inputData);
     string ReloadModel();
 }
 
@@ -17,12 +17,11 @@ public class PredictionService : IPredictionService
         _fastApiRespository = fastApiRespository;
     }
 
-    public Prediction AddPrediction(InputData inputData)
+    public async Task<Prediction> AddPrediction(InputData inputData)
     {
-        Prediction newPrediction = new Prediction() { RackId = inputData.RackId, Row = inputData.Row };
-        var response = _fastApiRespository.DoPrediction(inputData); //Call naar fastAPI
-        Console.WriteLine(response);
-        //return _predictionRepository.AddPrediction(newPrediction);
+        Prediction newPrediction = new Prediction() {RackId = inputData.RackId, Row = inputData.Row};
+        int response = await _fastApiRespository.DoPrediction(inputData);
+        newPrediction.Position = response;
         return newPrediction;
     }
 

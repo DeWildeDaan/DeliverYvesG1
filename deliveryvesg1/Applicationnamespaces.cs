@@ -2,6 +2,7 @@
 global using System;
 global using Microsoft.Extensions.Options;
 global using Azure;
+global using System.Text;
 
 //Project
 global using DeliverYves.Repositories;
@@ -12,3 +13,4 @@ global using DeliverYves.Models;
 
 //NuGet
 global using Azure.Data.Tables;
+global using Newtonsoft.Json;

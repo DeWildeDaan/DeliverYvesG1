@@ -24,3 +24,4 @@ C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Az
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\System.Memory.Data.dll
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\deliveryvesg1.csproj.CopyComplete
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Newtonsoft.Json.dll

@@ -2,7 +2,7 @@ namespace DeliverYves.Repositories;
 
 public interface IFastApiRespository
 {
-    Task<string> DoPrediction(InputData inputData);
+    Task<int> DoPrediction(InputData inputData);
 }
 
 public class FastApiRespository : IFastApiRespository
@@ -15,12 +15,17 @@ public class FastApiRespository : IFastApiRespository
         _uri = apiOptions.Value.Uri;
     }
 
-    public async Task<string> DoPrediction(InputData inputData)
+    public async Task<int> DoPrediction(InputData inputData)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_uri}/predict", inputData);
-        response.EnsureSuccessStatusCode();
-        string responseBody = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(responseBody);
-        return responseBody;
+        string url = $"{_uri}/predict";
+        string json = JsonConvert.SerializeObject(inputData);
+        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync(url, content);
+        // var contents = await response.Content.ReadAsStringAsync();
+        // OutputData outputData = JsonConvert.DeserializeObject<OutputData>(contents);
+
+        OutputData outputData = JsonConvert.DeserializeObject<OutputData>(response.Content.ReadAsStringAsync().Result);
+        Console.WriteLine(outputData.Position);
+        return 0;
     }
 }
