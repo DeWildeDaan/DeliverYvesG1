@@ -48,7 +48,7 @@ load_model()
 
 @app.get("/")
 async def read_root():
-    return {"Status": f"alive {datetime.now()}"}
+    return {"Status": f"alive"}
 
 @app.get("/reload")
 async def reload():
