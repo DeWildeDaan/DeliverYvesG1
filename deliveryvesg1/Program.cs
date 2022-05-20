@@ -11,6 +11,7 @@ builder.Services.AddTransient<ITableStorageContext, TableStorageContext>();
 builder.Services.AddTransient<IRackRespository, RackRespository>();
 builder.Services.AddTransient<IPredictionRespository, PredictionRespository>();
 builder.Services.AddTransient<ISampleDataRespository, SampleDataRespository>();
+builder.Services.AddTransient<IFastApiRespository, FastApiRespository>();
 //Services
 builder.Services.AddTransient<IRackService, RackService>();
 builder.Services.AddTransient<IPredictionService, PredictionService>();
@@ -94,5 +95,5 @@ app.MapPost("/prediction", (IPredictionService predictionService, InputData inpu
 });
 
 
-app.Run("http://localhost:3000");
-//app.Run();
+//app.Run("http://localhost:3000");
+app.Run();
