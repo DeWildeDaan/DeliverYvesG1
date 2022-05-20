@@ -40,6 +40,6 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./DeliverYvesG1FastAPI
           push: true
           tags: ${{ steps.meta.outputs.tags }}
