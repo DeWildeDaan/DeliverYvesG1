@@ -29,8 +29,8 @@ jobs:
         
   # This workflow contains a single job called "build"
   build_api:
-  
-    runs-on: ubuntu-latest
+
+    runs-on: ubuntu
 
     - name: Build API
       run: |
