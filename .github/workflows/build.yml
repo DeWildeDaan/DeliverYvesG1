@@ -1,0 +1,50 @@
+name: Build Master
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [ MINIMALAPI ]
+
+env:
+  AZURE_WEBAPP_NAME: DeliverYvesG1MinimalAPI  # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'    # set this to the path to your web app project, defaults to the repository root laten staan op punt
+  DOTNET_VERSION: '6.0.101'              # set this to the dotnet version to use
+ 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  build_server:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    steps:
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core ${{ env.DOTNET_VERSION }} Environment
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+        
+  # This workflow contains a single job called "build"
+  build_api:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+ 
+
+    - name: Build API
+      run: |
+        dotnet build ./deliveryvesg1/deliveryvesg1.csproj --configuration Release  
+        dotnet publish  ./deliveryvesg1/deliveryvesg1.csproj  -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+        
+    - name: Deploy API
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH  }}/myapp'
+        publish-profile: ${{ secrets.AZUREWEBAPP }}  #hier de. naam ingeven uit die secrets 
+        
+  
+          
