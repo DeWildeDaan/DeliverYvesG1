@@ -3,6 +3,7 @@ namespace DeliverYves.Services;
 public interface IPredictionService
 {
     Prediction AddPrediction(InputData inputData);
+    string ReloadModel();
 }
 
 public class PredictionService : IPredictionService
@@ -16,7 +17,14 @@ public class PredictionService : IPredictionService
 
     public Prediction AddPrediction(InputData inputData)
     {
-        Prediction prediction = new Prediction(){};
-        return prediction;
+        Prediction newPrediction = new Prediction() { RackId = inputData.RackId, Row = inputData.Row };
+        newPrediction.Position = 0; //Call naar fastAPI
+        return _predictionRepository.AddPrediction(newPrediction);
+    }
+
+    public string ReloadModel()
+    {
+        //Call naar fastAPI
+        return "0";
     }
 }

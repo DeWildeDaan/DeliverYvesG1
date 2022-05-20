@@ -2,21 +2,37 @@ var builder = WebApplication.CreateBuilder(args);
 //Database settings
 var dbSettings = builder.Configuration.GetSection("TSConnection");
 builder.Services.Configure<DatabaseSettings>(dbSettings);
+//FastAPI settings
+var apiSettings = builder.Configuration.GetSection("FastAPI");
+builder.Services.Configure<FastAPISettings>(apiSettings);
 //Database context
 builder.Services.AddTransient<ITableStorageContext, TableStorageContext>();
 //Repositories
 builder.Services.AddTransient<IRackRespository, RackRespository>();
 builder.Services.AddTransient<IPredictionRespository, PredictionRespository>();
+builder.Services.AddTransient<ISampleDataRespository, SampleDataRespository>();
 //Services
 builder.Services.AddTransient<IRackService, RackService>();
 builder.Services.AddTransient<IPredictionService, PredictionService>();
+builder.Services.AddTransient<ISampleDataService, SampleDataService>();
 
 var app = builder.Build();
 
 
-//RACKS ENDPOINTS
-app.MapGet("/", () => $"Status alive {DateTime.Now}");
+//ROOT ENDPOINT
+app.MapGet("/", () => $"Status alive {DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)}");
 
+
+//SAMPLEDATA ENDPOINTS
+app.MapGet("/sampledata", (ISampleDataService sampleDataService) => sampleDataService.GetSampleData());
+
+app.MapPost("/sampledata", (ISampleDataService sampleDataService, SampleData sampleData) =>
+{
+    var results = sampleDataService.AddSampleData(sampleData);
+    return Results.Created($"/sampledata", results);
+});
+
+//RACKS ENDPOINTS
 app.MapGet("/racks", (IRackService rackService) => rackService.GetRacks());
 
 app.MapGet("/racksbyrackid/{id}", (IRackService rackService, string id) =>
@@ -52,17 +68,24 @@ app.MapDelete("/racks/{rackid}/{customerid}", (IRackService rackService, string 
 
 
 //PREDICTIONS ENDPOINTS
+app.MapGet("/reloadmodel", (IPredictionService predictionService) =>
+{
+    var results = predictionService.ReloadModel();
+    return Results.Ok(results);
+});
+
+app.MapGet("/predictions", (IPredictionService predictionService) =>
+{
+    var results = 0;
+    return Results.Ok(results);
+});
+
 app.MapPost("/prediction", (IPredictionService predictionService, InputData inputData) =>
 {
     var results = predictionService.AddPrediction(inputData);
     return Results.Created($"/predictions/{inputData.RackId}", results);
 });
 
-app.MapGet("/reloadmodel", (IPredictionService predictionService) =>
-{
-    var results = "reloaded";
-    return Results.Ok(results);
-});
 
-//app.Run("http://localhost:3000");
-app.Run();
+app.Run("http://localhost:3000");
+//app.Run();

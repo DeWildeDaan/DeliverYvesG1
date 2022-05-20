@@ -4,6 +4,7 @@ public interface ITableStorageContext
 {
     TableClient RacksTableClient { get; }
     TableClient PredictionsTableClient { get; }
+    TableClient SampleDataTableClient { get; }
 }
 
 public class TableStorageContext : ITableStorageContext
@@ -29,6 +30,16 @@ public class TableStorageContext : ITableStorageContext
         get
         {
             var tableClient = new TableClient(new Uri(_settings.Uri), _settings.TableP, new TableSharedKeyCredential(_settings.Account, _settings.Key));
+            tableClient.CreateIfNotExistsAsync();
+            return tableClient;
+        }
+    }
+
+    public TableClient SampleDataTableClient
+    {
+        get
+        {
+            var tableClient = new TableClient(new Uri(_settings.Uri), _settings.TableS, new TableSharedKeyCredential(_settings.Account, _settings.Key));
             tableClient.CreateIfNotExistsAsync();
             return tableClient;
         }

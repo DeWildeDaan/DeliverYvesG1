@@ -1,0 +1,57 @@
+//Minimal API: https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io
+//FastAPI: https://deliveryvesg1fastapi.livelygrass-d3385627.northeurope.azurecontainerapps.io
+GET http://localhost:3000/ HTTP/1.1
+Content-Type: application/json
+###
+
+GET http://localhost:3000/sampledata HTTP/1.1
+Content-Type: application/json
+###
+
+POST http://localhost:3000/sampledata HTTP/1.1
+Content-Type: application/json
+
+{
+  "RackId":"3",
+  "RackRow": 3,
+  "WeightPre": 2.4,
+  "WeightPost":2.2,
+  "WeightDiff":0.2,
+  "DistMinH":1,
+  "DistMaxH":10,
+  "DistAvgH":5,
+  "DistMinL":1,
+  "DistMaxL":10,
+  "DistAvgL":5,
+  "DistTime":7
+}
+###
+
+GET http://localhost:3000/racks HTTP/1.1
+Content-Type: application/json
+###
+
+GET http://localhost:3000/racksbyrackid/5 HTTP/1.1
+Content-Type: application/json
+###
+
+GET http://localhost:3000/racksbycustomerid/1 HTTP/1.1
+Content-Type: application/json
+###
+
+GET http://localhost:3000/restock/5 HTTP/1.1
+Content-Type: application/json
+###
+
+POST http://localhost:3000/racks HTTP/1.1
+Content-Type: application/json
+
+{
+  "RackId":"5",
+  "CustomerId":"1"
+}
+###
+
+DELETE http://localhost:3000/racks/5/1 HTTP/1.1
+Content-Type: application/json
+###
