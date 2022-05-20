@@ -15,7 +15,7 @@ var app = builder.Build();
 
 
 //RACKS ENDPOINTS
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => $"Status alive {DateTime.Now}");
 
 app.MapGet("/racks", (IRackService rackService) => rackService.GetRacks());
 
