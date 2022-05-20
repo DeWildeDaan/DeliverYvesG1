@@ -36,7 +36,7 @@ jobs:
     - name: Build API
       run:
         dotnet build ./deliveryvesg1/deliveryvesg1.csproj --configuration Release  
-        dotnet publish  ./deliveryvesg1/deliveryvesg1.csproj -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+        dotnet publish ./deliveryvesg1/deliveryvesg1.csproj -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
         
     - name: Deploy API
       uses: Azure/webapps-deploy@v2
