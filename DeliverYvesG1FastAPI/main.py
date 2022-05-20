@@ -48,7 +48,7 @@ load_model()
 
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
+    return {"Status": "alive"}
 
 @app.get("/reload")
 async def reload():
