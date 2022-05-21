@@ -20,7 +20,7 @@ class InputData(BaseModel):
 
 
 def load_model():
-    mLink = 'https://github.com/DeWildeDaan/DeliverYvesG1-MCTS4/blob/API-SAMPLEDATA/DeliverYvesG1API/DeliverYvesG1API/MLModels/finalized_model.pkl?raw=true'
+    mLink = 'https://github.com/DeWildeDaan/DeliverYvesG1-MCTS4/blob/AI/FinalAIModel/finalized_model.pkl?raw=true'
     mfile = BytesIO(requests.get(mLink).content)
     global model
     model = pickle.load(mfile)
