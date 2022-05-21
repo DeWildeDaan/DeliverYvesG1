@@ -82,7 +82,7 @@ app.MapGet("/reloadmodel", async (IPredictionService predictionService) =>
     return Results.Ok(results);
 });
 
-app.MapGet("/predictions/", (IPredictionService predictionService) =>
+app.MapGet("/predictions/{rackid}", (IPredictionService predictionService, string rackid) =>
 {
     var results = 0;
     return Results.Ok(results);

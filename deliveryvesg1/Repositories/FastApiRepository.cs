@@ -23,9 +23,9 @@ public class FastApiRespository : IFastApiRespository
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync(url, content);
         if(response.IsSuccessStatusCode){
-            return "Inputdata sent";
+            return $"Inputdata sent {DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)}";
         } else{
-            return "Something went wrong";
+            return $"Something went wrong {DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)}";
         }
     }
 
@@ -34,9 +34,9 @@ public class FastApiRespository : IFastApiRespository
         string url = $"{_uri}/reload";
         var response = await _httpClient.GetAsync(url);
         if(response.IsSuccessStatusCode){
-            return "Reloaded";
+            return $"Reloaded {DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)}";
         } else{
-            return "Something went wrong";
+            return $"Something went wrong {DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)}";
         }
     }
 }
