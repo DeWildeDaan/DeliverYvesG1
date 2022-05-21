@@ -56,9 +56,9 @@ app.MapGet("/restock/{rackid}", (IRackService rackService, string rackid) =>
     return Results.Ok(results);
 });
 
-app.MapPost("/racks", (IRackService rackService) =>
+app.MapPost("/racks", (IRackService rackService, Rack rack) =>
 {
-    var results = rackService.AddRack();
+    var results = rackService.AddRack(rack);
     return Results.Created($"/racks", results);
 });
 
@@ -95,5 +95,5 @@ app.MapPost("/prediction", (IPredictionService predictionService, InputData inpu
 });
 
 
-//app.Run("http://localhost:3000");
-app.Run();
+app.Run("http://localhost:3000");
+//app.Run();

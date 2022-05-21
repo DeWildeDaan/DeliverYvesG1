@@ -2,14 +2,14 @@ namespace DeliverYves.Repositories;
 
 public interface IRackRespository
 {
-    int AddRack();
+    Rack AddRack(Rack newRack);
     string DeleteRack(string rackId);
     TableEntity RestockRack(string rackId);
     TableEntity UpdateRack(Rack newRack);
     Pageable<TableEntity> GetRacks();
     Pageable<TableEntity> GetRacksNoCustomerId();
     Pageable<TableEntity> GetRacksByCustomerId(string customerId);
-    Pageable<TableEntity> GetRacksByRackId(string rackId);
+    TableEntity GetRacksByRackId(string rackId);
 }
 
 public class RackRespository : IRackRespository
@@ -32,9 +32,9 @@ public class RackRespository : IRackRespository
         return queryResultsFilter;
     }
 
-    public Pageable<TableEntity> GetRacksByRackId(string rackId)
+    public TableEntity GetRacksByRackId(string rackId)
     {
-        Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{rackId}'");
+        TableEntity queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{rackId}'").LastOrDefault();
         return queryResultsFilter;
     }
 
@@ -44,66 +44,35 @@ public class RackRespository : IRackRespository
         return queryResultsFilter;
     }
 
-    public int AddRack()
+    public Rack AddRack(Rack newRack)
     {
-        Rack newRack = new Rack() { };
-        int lastId;
-        Pageable<TableEntity> entities = GetRacks();
-        List<int> ids = new List<int>();
-        foreach (TableEntity e in entities)
-        {
-            ids.Add(Int32.Parse(e.PartitionKey));
-        }
-        if (ids.Count() != 0)
-        {
-            lastId = ids.Max();
-            lastId++;
-        }
-        else
-        {
-            lastId = 1;
-        }
-
-        newRack.RackId = lastId.ToString();
-        if (String.IsNullOrEmpty(newRack.CustomerId))
-        {
+        TableEntity rack = GetRacksByRackId(newRack.RackId);
+        if(rack == null){
+            string registrationid = Guid.NewGuid().ToString();
             newRack.CustomerId = "";
+            var entity = new TableEntity(newRack.RackId, registrationid)
+            {
+                { "RackId", newRack.RackId },
+                { "CustomerId", newRack.CustomerId },
+                { "FilledOn", newRack.FilledOn }
+            };
+             _tableClient.AddEntity(entity);
         }
-        string registrationid = Guid.NewGuid().ToString();
-        var entity = new TableEntity(newRack.RackId, registrationid)
-        {
-            { "RackId", newRack.RackId },
-            { "CustomerId", newRack.CustomerId },
-            { "FilledOn", newRack.FilledOn }
-        };
-        _tableClient.AddEntity(entity);
-        return lastId;
+        return newRack;
     }
 
     public string DeleteRack(string rackId)
     {
-        string registrationId = "";
-        Pageable<TableEntity> entities = GetRacksByRackId(rackId);
-        foreach (TableEntity entity in entities)
-        {
-            registrationId = entity.GetString("RowKey");
-        }
-        _tableClient.DeleteEntity(rackId, registrationId);
+        TableEntity entity = GetRacksByRackId(rackId);
+        _tableClient.DeleteEntity(rackId, entity.GetString("RowKey"));
         return $"Rack {rackId} Deleted";
     }
 
     public TableEntity UpdateRack(Rack newRack)
     {
-        DateTime? filledOn = DateTime.Now;
-        string registrationId = "";
-        Pageable<TableEntity> entities = GetRacksByRackId(newRack.RackId);
-        foreach (TableEntity entity in entities)
-        {
-            registrationId = entity.GetString("RowKey");
-            filledOn = entity.GetDateTime("FilledOn");
-        }
-
-        var rack = new TableEntity(newRack.RackId, registrationId)
+        TableEntity entity = GetRacksByRackId(newRack.RackId);
+        DateTime? filledOn = entity.GetDateTime("FilledOn");
+        var rack = new TableEntity(newRack.RackId, entity.GetString("RowKey"))
         {
             { "RackId", newRack.RackId },
             { "CustomerId", newRack.CustomerId },
@@ -115,16 +84,9 @@ public class RackRespository : IRackRespository
 
     public TableEntity RestockRack(string rackId)
     {
-        string customerId = "";
-        string registrationId = "";
-        Pageable<TableEntity> entities = GetRacksByRackId(rackId);
-        foreach (TableEntity entity in entities)
-        {
-            registrationId = entity.GetString("RowKey");
-            customerId = entity.GetString("CustomerId");
-        }
-
-        var newRack = new TableEntity(rackId, registrationId)
+        TableEntity entity = GetRacksByRackId(rackId);
+        string customerId = entity.GetString("CustomerId");
+        var newRack = new TableEntity(rackId, entity.GetString("RowKey"))
         {
             { "RackId", rackId },
             { "CustomerId", customerId },
