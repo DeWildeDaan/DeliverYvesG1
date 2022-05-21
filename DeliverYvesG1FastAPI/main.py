@@ -1,15 +1,9 @@
-from typing import Union
-from xmlrpc.client import DateTime
 from fastapi import FastAPI
 from pydantic import BaseModel
 from io import BytesIO
 import pickle
-from pyexpat import model
 import requests
-from yaml import load
-from sklearn.linear_model import LinearRegression
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 from datetime import datetime
 import json
 

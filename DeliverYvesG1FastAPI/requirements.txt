@@ -2,6 +2,6 @@
 fastapi[all]==0.70.1
 uvicorn[standard]==0.15.0
 gunicorn==20.1.0
-sklearn
-numpy
+pydantic
 requests
+numpy
