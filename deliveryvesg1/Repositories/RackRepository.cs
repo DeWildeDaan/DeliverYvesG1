@@ -46,21 +46,24 @@ public class RackRespository : IRackRespository
 
     public Rack AddRack()
     {
-        Rack newRack = new Rack(){};
-        string lastId = "";
+        Rack newRack = new Rack() { };
         Pageable<TableEntity> entities = GetRacks();
+        List<int> ids = new List<int>();
         foreach (TableEntity e in entities)
         {
-            lastId = e.GetString("RackId");
+            ids.Add(Int32.Parse(e.PartitionKey));
         }
-        if(String.IsNullOrEmpty(lastId)){
+        if (ids.Count() != 0)
+        {
+            int lastId = ids.Max();
+            lastId++;
+            newRack.RackId = lastId.ToString();
+        }
+        else
+        {
             newRack.RackId = "1";
-        } else {
-            int rackId = Int32.Parse(lastId);
-            rackId++;
-            newRack.RackId = rackId.ToString();
         }
-        
+
 
         if (String.IsNullOrEmpty(newRack.CustomerId))
         {

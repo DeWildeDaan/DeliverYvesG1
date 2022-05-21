@@ -95,5 +95,5 @@ app.MapPost("/prediction", (IPredictionService predictionService, InputData inpu
 });
 
 
-//app.Run("http://localhost:3000");
-app.Run();
+app.Run("http://localhost:3000");
+//app.Run();

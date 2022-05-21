@@ -3,6 +3,7 @@ global using System;
 global using Microsoft.Extensions.Options;
 global using Azure;
 global using System.Text;
+global using System.Diagnostics;
 
 //Project
 global using DeliverYves.Repositories;
