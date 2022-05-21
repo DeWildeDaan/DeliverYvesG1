@@ -76,9 +76,9 @@ app.MapDelete("/racks/{rackid}", (IRackService rackService, string rackid) =>
 
 
 //PREDICTIONS ENDPOINTS
-app.MapGet("/reloadmodel", (IPredictionService predictionService) =>
+app.MapGet("/reloadmodel", async (IPredictionService predictionService) =>
 {
-    var results = predictionService.ReloadModel();
+    var results = await predictionService.ReloadModel();
     return Results.Ok(results);
 });
 
@@ -88,10 +88,16 @@ app.MapGet("/predictions/", (IPredictionService predictionService) =>
     return Results.Ok(results);
 });
 
-app.MapPost("/prediction", (IPredictionService predictionService, InputData inputData) =>
+app.MapPost("/predict", async (IPredictionService predictionService, InputData inputData) =>
 {
-    var results = predictionService.AddPrediction(inputData);
-    return Results.Created($"/predictions/{inputData.RackId}", results);
+    var results = await predictionService.Predict(inputData);
+    return Results.Accepted($"/predictions/{inputData.RackId}", results);
+});
+
+app.MapPost("/prediction", (IPredictionService predictionService, Prediction prediction) =>
+{
+    var results = predictionService.AddPrediction(prediction);
+    return Results.Created($"/predictions/{prediction.RackId}", results);
 });
 
 

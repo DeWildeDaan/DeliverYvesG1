@@ -2,8 +2,9 @@ namespace DeliverYves.Services;
 
 public interface IPredictionService
 {
-    Task<Prediction> AddPrediction(InputData inputData);
-    string ReloadModel();
+    Task<string> Predict(InputData inputData);
+    Prediction AddPrediction(Prediction newPrediction);
+    Task<string> ReloadModel();
 }
 
 public class PredictionService : IPredictionService
@@ -17,17 +18,20 @@ public class PredictionService : IPredictionService
         _fastApiRespository = fastApiRespository;
     }
 
-    public async Task<Prediction> AddPrediction(InputData inputData)
+    public async Task<string> Predict(InputData inputData)
     {
-        Prediction newPrediction = new Prediction() {RackId = inputData.RackId, Row = inputData.Row};
-        int response = await _fastApiRespository.DoPrediction(inputData);
-        newPrediction.Position = response;
-        return newPrediction;
+        return await _fastApiRespository.DoPrediction(inputData);
     }
 
-    public string ReloadModel()
+    public async Task<string> ReloadModel()
     {
-        //Call naar fastAPI
-        return "0";
+        return await _fastApiRespository.ReloadModel();
     }
+
+    public Prediction AddPrediction(Prediction newPrediction)
+    {
+        return _predictionRepository.AddPrediction(newPrediction);
+    }
+
+    
 }
