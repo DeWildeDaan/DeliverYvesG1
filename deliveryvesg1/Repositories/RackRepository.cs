@@ -2,7 +2,7 @@ namespace DeliverYves.Repositories;
 
 public interface IRackRespository
 {
-    Rack AddRack();
+    int AddRack();
     string DeleteRack(string rackId);
     TableEntity RestockRack(string rackId);
     TableEntity UpdateRack(Rack newRack);
@@ -44,9 +44,10 @@ public class RackRespository : IRackRespository
         return queryResultsFilter;
     }
 
-    public Rack AddRack()
+    public int AddRack()
     {
         Rack newRack = new Rack() { };
+        int lastId;
         Pageable<TableEntity> entities = GetRacks();
         List<int> ids = new List<int>();
         foreach (TableEntity e in entities)
@@ -55,16 +56,15 @@ public class RackRespository : IRackRespository
         }
         if (ids.Count() != 0)
         {
-            int lastId = ids.Max();
+            lastId = ids.Max();
             lastId++;
-            newRack.RackId = lastId.ToString();
         }
         else
         {
-            newRack.RackId = "1";
+            lastId = 1;
         }
 
-
+        newRack.RackId = lastId.ToString();
         if (String.IsNullOrEmpty(newRack.CustomerId))
         {
             newRack.CustomerId = "";
@@ -77,7 +77,7 @@ public class RackRespository : IRackRespository
             { "FilledOn", newRack.FilledOn }
         };
         _tableClient.AddEntity(entity);
-        return newRack;
+        return lastId;
     }
 
     public string DeleteRack(string rackId)

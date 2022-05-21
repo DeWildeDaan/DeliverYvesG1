@@ -2,7 +2,7 @@ namespace DeliverYves.Services;
 
 public interface IRackService
 {
-    Rack AddRack();
+    int AddRack();
     string DeleteRack(string rackId);
     TableEntity RestockRack(string rackId);
     TableEntity UpdateRack(Rack newRack);
@@ -41,7 +41,7 @@ public class RackService : IRackService
         return _rackRepository.GetRacksByCustomerId(customerId);
     }
 
-    public Rack AddRack()
+    public int AddRack()
     {
         return _rackRepository.AddRack();
     }
