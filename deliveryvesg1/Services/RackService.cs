@@ -6,9 +6,9 @@ public interface IRackService
     string DeleteRack(string rackId);
     TableEntity RestockRack(string rackId);
     TableEntity UpdateRack(Rack newRack);
-    Pageable<TableEntity> GetRacks();
+    List<Rack> GetRacks();
     Pageable<TableEntity> GetRacksNoCustomerId();
-    Pageable<TableEntity> GetRacksByCustomerId(string customerId);
+    List<Rack> GetRacksByCustomerId(string customerId);
     TableEntity GetRacksByRackId(string rackId);
 }
 
@@ -21,7 +21,7 @@ public class RackService : IRackService
         _rackRepository = rackRepository;
     }
 
-    public Pageable<TableEntity> GetRacks()
+    public List<Rack> GetRacks()
     {
         return _rackRepository.GetRacks();
     }
@@ -36,7 +36,7 @@ public class RackService : IRackService
         return _rackRepository.GetRacksByRackId(rackId);
     }
 
-    public Pageable<TableEntity> GetRacksByCustomerId(string customerId)
+    public List<Rack> GetRacksByCustomerId(string customerId)
     {
         return _rackRepository.GetRacksByCustomerId(customerId);
     }

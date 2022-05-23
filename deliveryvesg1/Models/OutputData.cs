@@ -1,5 +1,6 @@
 namespace DeliverYves.Models;
 public class OutputData
 {
-    public int? Position { get; set; }
+    public string? RackId { get; set; }
+    public List<Prediction>? Predictions { get; set; }
 }

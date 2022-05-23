@@ -16,8 +16,21 @@ builder.Services.AddTransient<IFastApiRespository, FastApiRespository>();
 builder.Services.AddTransient<IRackService, RackService>();
 builder.Services.AddTransient<IPredictionService, PredictionService>();
 builder.Services.AddTransient<ISampleDataService, SampleDataService>();
+//Swagger
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+//Swagger documentation
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.RoutePrefix = string.Empty;
+    });
+}
 
 
 //ROOT ENDPOINT
@@ -82,10 +95,9 @@ app.MapGet("/reloadmodel", async (IPredictionService predictionService) =>
     return Results.Ok(results);
 });
 
-app.MapGet("/predictions/{rackid}", (IPredictionService predictionService, string rackid) =>
+app.MapGet("/predictions/{customerid}", (IPredictionService predictionService, string customerid) =>
 {
-    var results = 0;
-    return Results.Ok(results);
+    return Results.Ok(predictionService.PredictionsByCustomer(customerid));
 });
 
 app.MapPost("/predict", async (IPredictionService predictionService, InputData inputData) =>
