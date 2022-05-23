@@ -20,6 +20,10 @@ public class RackRespository : IRackRespository
         _tableClient = context.RacksTableClient;
     }
 
+/// > Get all the rows from the table where the CustomerId is not empty
+/// 
+/// Returns:
+///   A list of racks.
     public List<Rack> GetRacks()
     {
         Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId ne ''");
@@ -39,18 +43,36 @@ public class RackRespository : IRackRespository
         return results;
     }
 
+/// > Get all the rows in the table where the CustomerId is an empty string
+/// 
+/// Returns:
+///   A Pageable<TableEntity> object.
     public Pageable<TableEntity> GetRacksNoCustomerId()
     {
         Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId eq ''");
         return queryResultsFilter;
     }
 
+/// > This function will return the last record in the table that matches the partition key
+/// 
+/// Args:
+///   rackId (string): The rackId is the PartitionKey in the table.
+/// 
+/// Returns:
+///   A TableEntity object.
     public TableEntity GetRacksByRackId(string rackId)
     {
         TableEntity queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{rackId}'").LastOrDefault();
         return queryResultsFilter;
     }
 
+/// > Get all the rows from the table where the CustomerId is equal to the customerId passed in
+/// 
+/// Args:
+///   customerId (string): The customerId is a string that is used to filter the results.
+/// 
+/// Returns:
+///   A list of racks that belong to the customer.
     public List<Rack> GetRacksByCustomerId(string customerId)
     {
         Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId eq '{customerId}'");
@@ -70,6 +92,13 @@ public class RackRespository : IRackRespository
         return results;
     }
 
+/// > Add a new rack to the table if it doesn't already exist
+/// 
+/// Args:
+///   Rack: This is the object that I'm trying to add to the table.
+/// 
+/// Returns:
+///   A new Rack object is being returned.
     public Rack AddRack(Rack newRack)
     {
         TableEntity rack = GetRacksByRackId(newRack.RackId);
@@ -92,6 +121,13 @@ public class RackRespository : IRackRespository
         return newRack;
     }
 
+/// > Delete the rack with the specified rackId
+/// 
+/// Args:
+///   rackId (string): The unique identifier for the rack.
+/// 
+/// Returns:
+///   The return value is a string that says "Rack {rackId} Deleted"
     public string DeleteRack(string rackId)
     {
         TableEntity entity = GetRacksByRackId(rackId);
@@ -99,6 +135,14 @@ public class RackRespository : IRackRespository
         return $"Rack {rackId} Deleted";
     }
 
+/// It takes a new rack object, gets the old rack object from the database, and then replaces the old
+/// rack object with the new rack object
+/// 
+/// Args:
+///   Rack: The new rack object that contains the updated values.
+/// 
+/// Returns:
+///   A TableEntity object.
     public TableEntity UpdateRack(Rack newRack)
     {
         TableEntity entity = GetRacksByRackId(newRack.RackId);
@@ -122,6 +166,14 @@ public class RackRespository : IRackRespository
         return rack;
     }
 
+/// > RestockRack() takes a rackId, gets the rack from the database, and then updates the database with
+/// the same rack, but with a new FilledOn date
+/// 
+/// Args:
+///   rackId (string): The rackId is the PartitionKey of the table.
+/// 
+/// Returns:
+///   A TableEntity object.
     public TableEntity RestockRack(string rackId)
     {
         TableEntity entity = GetRacksByRackId(rackId);

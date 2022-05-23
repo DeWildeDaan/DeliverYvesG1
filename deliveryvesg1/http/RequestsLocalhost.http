@@ -1,4 +1,8 @@
+//RESTCLIENT VSCODE PLUGIN:
+//https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
 //Minimal API: https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io
+//dotnet run
 //SAMPLE DATA ENDPOINTS
 GET http://localhost:3000/ HTTP/1.1
 Content-Type: application/json
@@ -120,6 +124,8 @@ Content-Type: application/json
 
 
 //FastAPI: https://deliveryvesg1fastapi.livelygrass-d3385627.northeurope.azurecontainerapps.io
+//python -m uvicorn main:app --reload
+//OR docker compose up
 GET http://localhost:8000/ HTTP/1.1
 Content-Type: application/json
 ###

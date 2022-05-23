@@ -14,6 +14,13 @@ public class PredictionRespository : IPredictionRespository
         _tableClient = context.PredictionsTableClient;
     }
 
+/// > This function adds a new prediction to the table storage
+/// 
+/// Args:
+///   Prediction: 
+/// 
+/// Returns:
+///   The new prediction object.
     public Prediction AddPrediction(Prediction newPrediction)
     {
         newPrediction.Id = Guid.NewGuid().ToString();
@@ -29,6 +36,15 @@ public class PredictionRespository : IPredictionRespository
         return newPrediction;
     }
 
+/// > Get all the predictions for a given rack, and return only the ones that are newer than the given
+/// date
+/// 
+/// Args:
+///   rackId (string): The rack ID of the rack you want to get predictions for.
+///   filledOn: The date and time of the last time the rack was filled.
+/// 
+/// Returns:
+///   A list of predictions.
     public List<Prediction> GetPredictions(string rackId, DateTime? filledOn)
     {
         List<Prediction> results = new List<Prediction>();

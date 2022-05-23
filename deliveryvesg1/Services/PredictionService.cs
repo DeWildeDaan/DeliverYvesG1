@@ -36,6 +36,13 @@ public class PredictionService : IPredictionService
         return _predictionRepository.AddPrediction(newPrediction);
     }
 
+/// > Get all the racks for a customer, then get all the predictions for each rack
+/// 
+/// Args:
+///   customerId (string): The customer id of the customer whose racks we want to get predictions for.
+/// 
+/// Returns:
+///   A list of OutputData objects.
     public List<OutputData> PredictionsByCustomer(string customerId)
     {
         List<OutputData> results = new List<OutputData>(); 
