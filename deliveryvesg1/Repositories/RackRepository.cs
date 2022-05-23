@@ -41,7 +41,7 @@ public class RackRespository : IRackRespository
 
     public Pageable<TableEntity> GetRacksNoCustomerId()
     {
-        Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId le ''");
+        Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId eq ''");
         return queryResultsFilter;
     }
 
@@ -103,10 +103,10 @@ public class RackRespository : IRackRespository
     {
         TableEntity entity = GetRacksByRackId(newRack.RackId);
         DateTime? filledOn = entity.GetDateTime("FilledOn");
-        newRack.Row1 = newRack.Row1!=null ? newRack.Row1 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row1"));
-        newRack.Row2 = newRack.Row2!=null ? newRack.Row2 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row2"));
-        newRack.Row3 = newRack.Row3!=null ? newRack.Row3 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row3"));
-        newRack.Row4 = newRack.Row4!=null ? newRack.Row4 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row4"));
+        newRack.Row1 = newRack.Row1 != null ? newRack.Row1 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row1"));
+        newRack.Row2 = newRack.Row2 != null ? newRack.Row2 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row2"));
+        newRack.Row3 = newRack.Row3 != null ? newRack.Row3 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row3"));
+        newRack.Row4 = newRack.Row4 != null ? newRack.Row4 : JsonConvert.DeserializeObject<List<string>>(entity.GetString("Row4"));
 
         var rack = new TableEntity(newRack.RackId, entity.GetString("RowKey"))
         {
