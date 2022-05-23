@@ -22,7 +22,7 @@ public class RackRespository : IRackRespository
 
     public List<Rack> GetRacks()
     {
-        Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId ne 'null'");
+        Pageable<TableEntity> queryResultsFilter = _tableClient.Query<TableEntity>(filter: $"CustomerId ne ''");
         List<Rack> results = new List<Rack>();
         foreach (TableEntity r in queryResultsFilter)
         {
