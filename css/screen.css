@@ -11,8 +11,8 @@
    --global-color-neural-x-dark: #00363F;
  
    /* border stuff */
-   --global-borderRadius: 0.1875em;
-   --global-borderWidth: 0.0625em;
+   --global-borderRadius: 0.3125rem;
+   --global-borderWidth: 0.0625rem;
  
    /* Baseline settings */
    --global-baseline: 0.5em;
@@ -362,55 +362,140 @@
     ---
     Website main logo
 */
-
-.c-logo {
-	height: 48px;
-	display: flex;
-	align-items: center;
+.c-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.c-logo_symbol {
+	height: 2.5rem;
+    margin-left: 1rem;
 }
 
-.c-logo__symbol {
-	height: 100%;
-}
 /*
     Component: header
     ---
     Main header of the website
 */
+.c-header_background{
+    background-color: var(--global-color-accent2);
+    
+}
 .c-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+    width: 100%;
+    padding: 1rem 0 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.c-header-fixed {
-	width: 100%;
-	position: fixed;
-	background: #ffe01b;
-	padding: 24px;
-	top: 0;
+/*
+    Component: navigation
+    ---
+    Navigation of the website
+*/
+.c-nav{
+    color: var(--global-color-neural-dark);
+    font-weight: 600;
+}
+
+.c-nav_btn{
+    text-transform: uppercase;
+    margin-right: 1rem;
+}
+
+.c-nav_btn:hover{
+    color: var(--global-color-accent1);
+    cursor: pointer;
+}
+
+.c-nav_btn:focus{
+    color: var(--global-color-accent1);
+}
+
+.c-nav_btn:active{
+    color: var(--global-color-accent1);
+    opacity: 0.8;
+}
+
+.c-nav_btn-selected{
+    color: var(--global-color-accent1);
+}
+
+/*
+    Component: split
+    ---
+    Split body of the website
+*/
+.c-split{
+    height: 100%;
+    position: fixed;
     z-index: 1;
+    overflow-x: hidden;
 }
 
-.c-header__nav,
-.c-header__cta {
-	display: none;
+.c-left {
+    width: 33%;
+    left: 0;
+    border-right: var(--global-borderWidth) solid var(--global-color-neural-dark);
 }
 
-@media (min-width: 1024px) {
-	.c-header__nav,
-	.c-header__cta {
-		display: block;
-	}
-
-	.c-header__nav {
-		margin-right: 24px;
-		display: flex;
-		flex-grow: 1;
-		justify-content: flex-end;
-	}
+.c-right {
+    width: 67%;
+    right: 0;
 }
 
+/*
+    Component: input
+    ---
+    Input of the search bar, left side
+*/
+.c-form {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 0.5rem;
+}
+
+.c-input {
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;    
+    appearance: none;
+    outline: none;
+    border-radius: var(--global-borderRadius);
+    border: var(--global-borderWidth) solid var(--global-color-neural-dark);
+    background-color: var(--global-color-neutral);
+    color: var(--global-color-neural-x-dark);
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: calc(var(--global-baseline) * 3);
+}
+
+.c-input:focus,
+.c-input:active {
+    border-color: var(--global-color-neural-x-dark);
+    box-shadow: 2px var(--global-color-neural-x-dark);
+}
+
+/*
+    Component: title
+    ---
+    Title, left side
+*/
+.c-title{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem 0 0.5rem;
+}
+
+.c-title_item{
+    display: flex;
+    align-items: center;
+}
  
  /*------------------------------------*\
  #UTILITIES
