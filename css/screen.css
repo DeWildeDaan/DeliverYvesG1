@@ -6,12 +6,14 @@
     /* colors */
     --global-color-accent1: #0084A4;
     --global-color-accent2: #FFDF43;
+    --global-color-light: #AAB2BF;
    --global-color-neutral: #FFF9F4;
    --global-color-neural-dark: #5E5A59;
    --global-color-neural-x-dark: #00363F;
  
    /* border stuff */
-   --global-borderRadius: 0.3125rem;
+   --global-borderRadiusSoft: 0.3125rem;
+   --global-borderRadiusHard: 3.125rem;
    --global-borderWidth: 0.0625rem;
  
    /* Baseline settings */
@@ -436,13 +438,17 @@
 }
 
 .c-left {
-    width: 33%;
+    width: 30%;
     left: 0;
-    border-right: var(--global-borderWidth) solid var(--global-color-neural-dark);
+    overflow-y: hidden;
+}
+
+.c-left-body{
+    padding: 0 0.5rem 0.5rem 0.5rem;
 }
 
 .c-right {
-    width: 67%;
+    width: 70%;
     right: 0;
 }
 
@@ -455,22 +461,25 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    padding-left: 0.5rem;
+    width: 100%;
+    border-radius: var(--global-borderRadiusSoft);
 }
 
 .c-input {
-    width: 100%;
     -webkit-appearance: none;
     -moz-appearance: none;    
     appearance: none;
     outline: none;
-    border-radius: var(--global-borderRadius);
+    border-radius: var(--global-borderRadiusSoft);
     border: var(--global-borderWidth) solid var(--global-color-neural-dark);
     background-color: var(--global-color-neutral);
     color: var(--global-color-neural-x-dark);
     font-family: inherit;
     font-size: 1rem;
     line-height: calc(var(--global-baseline) * 3);
+    width: 100%;
+    padding: 9px 4px 9px 40px;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 13px center;
 }
 
 .c-input:focus,
@@ -484,18 +493,91 @@
     ---
     Title, left side
 */
-.c-title{
+.c-title-left{
+    padding: 0.25rem;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0.5rem 0 0.5rem;
+    background-color: var(--global-color-accent1);
+    border-radius: var(--global-borderRadiusSoft);
+    margin: 1rem 0 0.5rem 0;
+    color: var(--global-color-neutral);
 }
 
-.c-title_item{
+.c-title-left_item{
     display: flex;
     align-items: center;
 }
+
+.c-title-left_arrow{
+    text-align: center;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+}
+
+.c-title-left_arrow:hover, .c-title-left_arrow:focus{
+    opacity: 0.8;
+}
+
+.c-title-left_arrow-flip{
+    transform: rotate(180deg);
+}
+
+/*
+    Component: customers
+    ---
+    Customer list and customer buttons, left side
+*/
+.c-customer-list{
+    overflow-y: scroll;
+    height: calc(100vh - 12rem);
+}
+.c-customer-button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: var(--global-borderRadiusHard) var(--global-borderRadiusSoft) var(--global-borderRadiusSoft) var(--global-borderRadiusHard);
+    padding: 0 0.5rem 0 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.c-customer-button_selected{
+    background-color: var(--global-color-accent2);
+}
+
+.c-customer-button:hover, .c-customer-button:focus{
+    background-color: var(--global-color-accent2);
+}
+
+.c-customer-button:active{
+    opacity: 0.8;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--global-color-light);
+    border-radius: var(--global-borderRadiusHard);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--global-color-neural-dark);
+    border-radius: var(--global-borderRadiusHard);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--global-color-neural-x-dark);
+  }
  
  /*------------------------------------*\
  #UTILITIES
