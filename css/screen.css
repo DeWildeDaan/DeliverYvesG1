@@ -70,14 +70,14 @@
  */
  
  ::-moz-selection {
-     background: var(--global-color-neutral);
-     color: var(--global-color-neutral-xx-dark);
+     background: var(--global-color-accent1);
+     color: var(--global-color-neutral);
      text-shadow: none;
  }
  
  ::selection {
-     background: var(--global-color-neutral);
-     color: var(--global-color-neutral-xx-dark);
+    background: var(--global-color-accent1);
+    color: var(--global-color-neutral);
      text-shadow: none;
  }
  
@@ -153,6 +153,14 @@
  li ol {
      margin-bottom: 0;
  }
+ 
+ table{
+     width: 100%;
+ }
+
+ th, td{
+    padding-right: 2rem;
+}
  
  blockquote {
      font-style: normal;
@@ -666,7 +674,91 @@
 .c-rack-row-item_unavailable{
     background-color: var(--global-color-nonavailable) !important;
 }
- 
+
+  /*
+    Component: Manage racks
+    ---
+    titles for the manage page
+*/
+
+.c-new-racks{
+    width: 100%;
+    
+}
+.c-title-main-manage{
+    color: var(--global-color-accent1);
+    font-size: 2rem;
+    font-weight: 600;
+    
+}
+
+.c-title-manage{
+    color: var(--global-color-neural-dark);
+    font-size: 1.5rem;
+}
+
+.c-new-customer-btn{
+    background-color: var(--global-color-accent1);
+    border-radius: var(--global-borderRadiusHard);
+    color: var(--global-color-neutral);
+    padding: 0.5rem;
+}
+
+.c-new-customer-btn:hover, .c-new-customer-btn:focus, .c-new-customer-btn:active{
+    opacity: 0.8;
+}
+
+  /*
+    Component: Custom dropdown
+    ---
+    Custom dropdown for the manage page
+*/
+
+.c-dropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.c-dropdown-content {
+    display: none;
+    position: absolute;
+    overflow: auto;
+    border-radius: var(--global-borderRadiusSoft);
+    border: var(--global-borderWidth) solid var(--global-color-neural-x-dark);
+    z-index: 1;
+    overflow-y: scroll;
+    max-height: 15rem;
+  }
+
+  .c-dropdown-content-button {
+    color: var(--global-color-neural-x-dark);
+    background-color: var(--global-color-neutral);
+    width: 100%;
+    display: block;
+    text-align: start;
+    padding: 0.25rem 0 0 0.5rem;
+    cursor: pointer;
+    border-top: var(--global-borderWidth) solid var(--global-color-neural-x-dark);
+  }
+
+  .c-dropdown-content-button:hover, .c-dropdown-content-button:focus,.c-dropdown-content-button:active{
+    background-color: var(--global-color-accent1);
+    color: var(--global-color-neutral);
+  }
+
+  .c-dropdown-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;    
+    appearance: none;
+    outline: none;
+    border: none;
+    padding: 0.5rem;
+    background-color: var(--global-color-neutral);
+  }
+
+  .c-dropdown-show {display: block;}
+
+  
  /*------------------------------------*\
  #UTILITIES
  \*------------------------------------*/
