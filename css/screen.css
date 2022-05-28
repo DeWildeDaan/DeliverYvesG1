@@ -10,6 +10,9 @@
    --global-color-neutral: #FFF9F4;
    --global-color-neural-dark: #5E5A59;
    --global-color-neural-x-dark: #00363F;
+
+   --global-color-available: #00A680;
+   --global-color-nonavailable: #F07E4C;
  
    /* border stuff */
    --global-borderRadiusSoft: 0.3125rem;
@@ -422,7 +425,7 @@
 }
 
 .c-nav_btn-selected{
-    color: var(--global-color-accent1);
+    color: var(--global-color-accent1) !important;
 }
 
 /*
@@ -450,6 +453,12 @@
 .c-right {
     width: 70%;
     right: 0;
+    overflow-y: hidden;
+}
+
+.c-right-body{
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    height: 100%;
 }
 
 /*
@@ -512,8 +521,8 @@
 
 .c-title-left_arrow{
     text-align: center;
-    height: 24px;
-    width: 24px;
+    height: 1.5rem;
+    width: 1.5rem;
     cursor: pointer;
 }
 
@@ -526,13 +535,53 @@
 }
 
 /*
+    Component: title
+    ---
+    Title, right side
+*/
+.c-title-right{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.c-title-right-text{
+    font-size: 1.25rem;
+    color: var(--global-color-accent1);
+    font-weight: 600;
+}
+
+.c-title-right-btn{
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: var(--global-color-accent1);
+    padding: 0.5rem;
+    border-radius: var(--global-borderRadiusHard);
+    color: var(--global-color-neutral);
+}
+
+.c-title-right-arr_left{
+    transform: rotate(90deg);
+}
+
+.c-title-right-arr_right{
+    transform: rotate(-90deg);
+}
+
+.c-title-right-btn:hover, .c-title-right-btn:focus{
+    opacity: 0.8;
+}
+
+/*
     Component: customers
     ---
     Customer list and customer buttons, left side
 */
 .c-customer-list{
     overflow-y: scroll;
-    height: calc(100vh - 12rem);
+    height: calc(100vh - 12.25rem);
 }
 .c-customer-button{
     width: 100%;
@@ -578,6 +627,45 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--global-color-neural-x-dark);
   }
+
+  /*
+    Component: racks
+    ---
+    Racks, right side
+*/
+.c-racks{
+    width: 100%;
+    height: calc(100vh - 9.5rem);
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    margin-top: 1rem;
+}
+
+.c-rack{
+    margin: 0.5rem 1rem;
+}
+
+.c-rack-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.c-rack-row-item{
+    text-align: center;
+    background-color: var(--global-color-available);
+    padding: 0.25rem 1rem 0.25rem 1rem;
+    margin: 0.25rem;
+    width: 100%;
+    border-radius: var(--global-borderRadiusSoft);
+}
+
+.c-rack-row-item_unavailable{
+    background-color: var(--global-color-nonavailable) !important;
+}
  
  /*------------------------------------*\
  #UTILITIES
