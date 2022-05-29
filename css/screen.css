@@ -153,9 +153,10 @@
  li ol {
      margin-bottom: 0;
  }
- 
+
  table{
-     width: 100%;
+    max-width: 100%;
+    font-size: 0.80rem;
  }
 
  th, td{
@@ -681,9 +682,10 @@
     titles for the manage page
 */
 
-.c-new-racks{
+.c-manage-racks{
     width: 100%;
-    
+    height: 100%;
+    margin: 1rem;
 }
 .c-title-main-manage{
     color: var(--global-color-accent1);
@@ -706,6 +708,25 @@
 
 .c-new-customer-btn:hover, .c-new-customer-btn:focus, .c-new-customer-btn:active{
     opacity: 0.8;
+}
+
+.c-manage-input{
+    -webkit-appearance: none;
+    -moz-appearance: none;    
+    appearance: none;
+    outline: none;
+    font-family: inherit;
+    background-color: var(--global-color-neutral);
+    color: var(--global-color-neural-x-dark);
+    border: var(--global-borderWidth) solid var(--global-color-neural-x-dark);
+    border-radius: var(--global-borderRadiusSoft);
+    padding: 0.25rem;
+    width: 9rem;
+}
+
+.c-manage-button:hover, .c-manage-button:focus, .c-manage-button:active{
+    opacity: 0.8;
+    cursor: pointer;
 }
 
   /*
@@ -748,7 +769,8 @@
 
   .c-dropdown-input {
     -webkit-appearance: none;
-    -moz-appearance: none;    
+    -moz-appearance: none;   
+    font-family: inherit; 
     appearance: none;
     outline: none;
     border: none;
