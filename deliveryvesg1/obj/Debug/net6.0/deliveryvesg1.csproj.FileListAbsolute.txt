@@ -30,3 +30,4 @@ C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Sw
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\obj\Debug\net6.0\deliveryvesg1.MvcApplicationPartsAssemblyInfo.cs
+C:\School\Industry Project\DeliverYvesG1-MCTS4\deliveryvesg1\bin\Debug\net6.0\http\S4 Industry Project.postman_collection.json
