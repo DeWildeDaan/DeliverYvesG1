@@ -9,8 +9,26 @@ let customers;
 
 //#region ***  Callback-Visualisation - show___         ***********
 const showCustomers = function (jsonObject) {
-  let html = '';
-  console.log(jsonObject);
+  let html = customerList.innerHTML;
+  let total = 0;
+  var name = "";
+  for (let customer of customers) {
+    if (customer.Id == jsonObject[0].customerId) {
+      name = customer.Name;
+      console.log(name);
+    }
+  }
+  for (let rack of jsonObject) {
+    console.log(rack);
+    total = total + rack.total;
+  }
+  html += `
+                        <button class="o-button-reset c-customer-button">
+                            <p class="o-remove-margin">${name}</p>
+                            <p class="o-remove-margin">${total}</p>
+                        </button>
+  `;
+  customerList.innerHTML = html;
 };
 //#endregion
 
@@ -29,11 +47,7 @@ const callbackCustomers = function (jsonObject) {
 //#region ***  Data Access - get___                     ***********
 const getCustomers = function () {
   //In realiteit spreek je de klantendatabase aan
-  customers = [
-    { Naam: "Daan", Id: 1 },
-    { Naam: "Alec", Id: 2 },
-    { Naam: "Dominic", Id: 3 },
-  ];
+  customers = [{ Name: "Daan", Id: "1" }];
   callbackCustomers(customers);
 };
 
