@@ -49,7 +49,7 @@ public class PredictionService : IPredictionService
         List<Rack> racks = _rackRespository.GetRacksByCustomerId(customerId);
         foreach(Rack r in racks){
             var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn);
-            results.Add(new OutputData(){RackId = r.RackId, Total = predictions.Count, Predictions = predictions});
+            results.Add(new OutputData(){RackId = r.RackId, CustomerId = customerId, Total = predictions.Count, Predictions = predictions});
         }
         return results;
     }
