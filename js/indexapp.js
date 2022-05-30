@@ -9,11 +9,8 @@ let customers;
 
 //#region ***  Callback-Visualisation - show___         ***********
 const showCustomers = function (jsonObject) {
-  let html = "";
-  console.log(customerList.innerHTML);
-  for (let customer of customers) {
-    console.log(customer);
-  }
+  let html = '';
+  console.log(jsonObject);
 };
 //#endregion
 

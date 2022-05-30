@@ -6,7 +6,7 @@ const handleData = function (url, callbackFunctionName, callbackErrorFunctionNam
     body: body,
     headers: {
       'content-type': 'application/json',
-      'User-Agent': 'DeliverYvesG1 (mct.be/daan.de.wilde@student.howest.be)'
+      'User-Agent': 'DeliverYvesG1 (mct.be - https://github.com/DeWildeDaan/DeliverYvesG1-MCTS4)'
     },
   })
     .then(function (response) {
