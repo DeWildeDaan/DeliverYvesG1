@@ -10,10 +10,10 @@ builder.Services.AddCors(options =>
                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/",
                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/index.html",
                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/manage.html",
-                                                "http://127.0.0.1",
-                                                "http://127.0.0.1/",
-                                                "http://127.0.0.1/index.html",
-                                                "http://127.0.0.1/manage.html")
+                                                "http://127.0.0.1:5500",
+                                                "http://127.0.0.1:5500/",
+                                                "http://127.0.0.1:5500/index.html",
+                                                "http://127.0.0.1:5500/manage.html")
                                                 .AllowAnyHeader()
                                                 .AllowAnyMethod();
                       });
