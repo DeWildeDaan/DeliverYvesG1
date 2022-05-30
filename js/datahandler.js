@@ -6,8 +6,7 @@ const handleData = function (url, callbackFunctionName, callbackErrorFunctionNam
     body: body,
     headers: {
       'content-type': 'application/json',
-      'User-Agent': 'ChargeMap/1.0 (studentproject.mct.be/daan.de.wilde@student.howest.be)',
-      'X-API-Key': '0d38ed9b-3055-4756-94dc-f62f940b6914',
+      'User-Agent': 'DeliverYvesG1 (mct.be/daan.de.wilde@student.howest.be)'
     },
   })
     .then(function (response) {
