@@ -6,10 +6,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy  =>
                       {
-                          policy.WithOrigins("https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/index.html",
-                                              "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/manage.html",
-                                              "https://127.0.0.0/index.html",
-                                              "https://127.0.0.0/manage.html")
+                          policy.WithOrigins("https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io",
+                                                "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/",
+                                                "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/index.html",
+                                                "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/manage.html",
+                                                "https://127.0.0.0/index.html",
+                                                "https://127.0.0.0/manage.html")
                                                 .AllowAnyHeader()
                                                 .AllowAnyMethod();
                       });
