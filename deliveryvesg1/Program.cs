@@ -1,21 +1,21 @@
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+//var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 //CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy  =>
-                      {
-                          policy.WithOrigins("https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io",
-                                                "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/",
-                                                "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/index.html",
-                                                "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/manage.html",
-                                                "https://127.0.0.0/index.html",
-                                                "https://127.0.0.0/manage.html")
-                                                .AllowAnyHeader()
-                                                .AllowAnyMethod();
-                      });
-});
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(name: MyAllowSpecificOrigins,
+//                       policy  =>
+//                       {
+//                           policy.WithOrigins("https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io",
+//                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/",
+//                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/index.html",
+//                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/manage.html",
+//                                                 "https://127.0.0.0/index.html",
+//                                                 "https://127.0.0.0/manage.html")
+//                                                 .AllowAnyHeader()
+//                                                 .AllowAnyMethod();
+//                       });
+// });
 //Database settings
 var dbSettings = builder.Configuration.GetSection("TSConnection");
 builder.Services.Configure<DatabaseSettings>(dbSettings);
@@ -39,7 +39,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 //CORS
-app.UseCors(MyAllowSpecificOrigins);
+//app.UseCors(MyAllowSpecificOrigins);
+ app.UseCors(builder => builder
+     .AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader());   
+ app.UseMvc();
 //Swagger documentation
 if (app.Environment.IsDevelopment())
 {
