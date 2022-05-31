@@ -1,22 +1,35 @@
-'use strict';
+"use strict";
 
-const handleData = function (url, callbackFunctionName, callbackErrorFunctionName = null, method = 'GET', body = null) {
+const handleData = function (
+  url,
+  callbackFunctionName,
+  callbackErrorFunctionName = null,
+  method = "GET",
+  body = null
+) {
   fetch(url, {
     method: method,
     body: body,
     headers: {
-      'content-type': 'application/json',
-      'User-Agent': 'DeliverYvesG1 (mct.be - https://github.com/DeWildeDaan/DeliverYvesG1-MCTS4)'
+      "content-type": "application/json",
+      "User-Agent":
+        "DeliverYvesG1 (mct.be - https://github.com/DeWildeDaan/DeliverYvesG1-MCTS4)",
     },
   })
     .then(function (response) {
       if (!response.ok) {
-        console.warn(`>> Probleem bij de fetch(). Statuscode: ${response.status}`);
+        console.warn(
+          `>> Probleem bij de fetch(). Statuscode: ${response.status}`
+        );
         if (callbackErrorFunctionName) {
-          console.warn(`>> Callback errorfunctie ${callbackErrorFunctionName.name}(response) wordt opgeroepen`);
+          console.warn(
+            `>> Callback errorfunctie ${callbackErrorFunctionName.name}(response) wordt opgeroepen`
+          );
           callbackErrorFunctionName(response);
         } else {
-          console.warn('>> Er is geen callback errorfunctie meegegeven als parameter');
+          console.warn(
+            ">> Er is geen callback errorfunctie meegegeven als parameter"
+          );
         }
       } else {
         //console.info('>> Er is een response teruggekomen van de server');

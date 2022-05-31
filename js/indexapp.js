@@ -4,24 +4,11 @@ let baseUrl =
 
 //#region ***  DOM references                           ***********
 let customerList;
-let customers;
 //#endregion
 
 //#region ***  Callback-Visualisation - show___         ***********
-const showCustomers = function (jsonObject) {
+const showCustomers = function () {
   let html = customerList.innerHTML;
-  let total = 0;
-  var name = "";
-  for (let customer of customers) {
-    if (customer.Id == jsonObject[0].customerId) {
-      name = customer.Name;
-      console.log(name);
-    }
-  }
-  for (let rack of jsonObject) {
-    console.log(rack);
-    total = total + rack.total;
-  }
   html += `
                         <button class="o-button-reset c-customer-button">
                             <p class="o-remove-margin">${name}</p>
@@ -39,21 +26,29 @@ const callbackError = function (jsonObject) {
 
 const callbackCustomers = function (jsonObject) {
   for (let customer of jsonObject) {
-    getDataCustomer(customer.Id);
+    customer["TotalPredictions"] = getPredictionsCustomer(customer.Id);
   }
 };
+
+const callbackTotalPredictions = function (jsonObject) {
+  console.log(jsonObject);
+};
+
 //#endregion
 
 //#region ***  Data Access - get___                     ***********
 const getCustomers = function () {
   //In realiteit spreek je de klantendatabase aan
-  customers = [{ Name: "Daan", Id: "1" }];
+  let customers = [
+    { Name: "Daan", Id: "1" },
+    { Name: "Alec", Id: "2" },
+  ];
   callbackCustomers(customers);
 };
 
-const getDataCustomer = function (customerId) {
-  let url = `${baseUrl}/predictions/${customerId}`;
-  handleData(url, showCustomers, callbackError, "GET");
+const getPredictionsCustomer = function (customerId) {
+  let url = `${baseUrl}/totalpredictions/${customerId}`;
+  handleData(url, callbackTotalPredictions, callbackError);
 };
 //#endregion
 
