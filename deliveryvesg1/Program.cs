@@ -153,7 +153,7 @@ app.MapGet("/predictions/{customerid}", (IPredictionService predictionService, s
 into the route and the `PredictionsByCustomer` method is called. */
 app.MapGet("/totalpredictions/{customerid}", (IPredictionService predictionService, string customerid) =>
 {
-    return Results.Ok(predictionService.PredictionsByCustomer(customerid));
+    return Results.Ok(predictionService.TotalPredictionsByCustomer(customerid));
 });
 
 /* This is a route that is mapped to the `/predict` endpoint. The `predictionService` is injected

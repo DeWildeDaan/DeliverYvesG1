@@ -6,6 +6,7 @@ public interface IPredictionService
     Prediction AddPrediction(Prediction newPrediction);
     Task<string> ReloadModel();
     List<OutputData> PredictionsByCustomer(string customerId);
+    int TotalPredictionsByCustomer(string customerId);
 }
 
 public class PredictionService : IPredictionService

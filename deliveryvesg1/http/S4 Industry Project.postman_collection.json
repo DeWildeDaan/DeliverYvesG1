@@ -416,6 +416,29 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get total predictions per customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/totalpredictions/1",
+							"protocol": "https",
+							"host": [
+								"deliveryevesg1minimalapi",
+								"livelygrass-d3385627",
+								"northeurope",
+								"azurecontainerapps",
+								"io"
+							],
+							"path": [
+								"totalpredictions",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "All API requests for the .NET6 Minimal API"
