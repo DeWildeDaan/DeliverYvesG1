@@ -43,7 +43,9 @@ const showFilteredCustomers = function (arr) {
 const showSelectedCustomer = function () {
   let allCustomerBtns = document.querySelectorAll(".js-customer-button");
   allCustomerBtns[0].classList.add("c-customer-button_selected");
+  let customerId = allCustomerBtns[0].getAttribute("data-customerId");
   previousCustomer = allCustomerBtns[0];
+  getPredictionsCustomer(customerId);
 };
 //#endregion
 
@@ -54,17 +56,8 @@ const callbackError = function (jsonObject) {
 
 const callbackCustomers = function (jsonObject) {
   for (let customer of jsonObject) {
-    callbackGetTotalPredictions(customer.Id, customer.Name);
+    getTotalPredictions(customer.Id, customer.Name);
   }
-};
-
-const callbackGetTotalPredictions = function (customerId, name) {
-  let url = `${baseUrl}/totalpredictions`;
-  const body = JSON.stringify({
-    CustomerId: customerId,
-    Name: name,
-  });
-  handleData(url, callbackTotalPredictions, callbackError, "POST", body);
 };
 
 const callbackTotalPredictions = function (jsonObject) {
@@ -77,8 +70,6 @@ const callbackTotalPredictions = function (jsonObject) {
   }
 };
 
-const callbackSortCustomers = function () {};
-
 //#endregion
 
 //#region ***  Data Access - get___                     ***********
@@ -89,6 +80,19 @@ const getCustomers = function () {
     { Name: "alec", Id: "2" },
   ];
   callbackCustomers(customers);
+};
+
+const getTotalPredictions = function (customerId, name) {
+  let url = `${baseUrl}/totalpredictions`;
+  const body = JSON.stringify({
+    CustomerId: customerId,
+    Name: name,
+  });
+  handleData(url, callbackTotalPredictions, callbackError, "POST", body);
+};
+
+const getPredictionsCustomer = function (customerId) {
+  console.log(customerId);
 };
 //#endregion
 
@@ -121,7 +125,7 @@ const listenToCustomerButton = function () {
       this.classList.add("c-customer-button_selected");
       let customerId = this.getAttribute("data-customerId");
       previousCustomer = this;
-      
+      getPredictionsCustomer(customerId);
     });
   }
 };

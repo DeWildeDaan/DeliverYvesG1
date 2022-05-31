@@ -756,6 +756,7 @@
   }
 
   .c-dropdown-content-button {
+      text-transform: capitalize;
     color: var(--global-color-neural-x-dark);
     background-color: var(--global-color-neutral);
     width: 100%;
