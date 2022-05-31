@@ -174,6 +174,6 @@ app.MapPost("/prediction", (IPredictionService predictionService, Prediction pre
 
 
 //Local development:
-//app.Run("http://localhost:3000");
+app.Run("http://localhost:3000");
 //Docker image:
-app.Run();
+//app.Run();

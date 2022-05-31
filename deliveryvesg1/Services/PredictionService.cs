@@ -37,21 +37,39 @@ public class PredictionService : IPredictionService
         return _predictionRepository.AddPrediction(newPrediction);
     }
 
-    /// > Get all the racks for a customer, then get all the predictions for each rack
-    /// 
-    /// Args:
-    ///   customerId (string): The customer id of the customer whose racks we want to get predictions for.
-    /// 
-    /// Returns:
-    ///   A list of OutputData objects.
+    
+/// > Get all the racks for a customer, then for each rack, get the total number of predictions, and the
+/// number of predictions for each row, and the number of predictions for each side of each row
+/// 
+/// Args:
+///   customerId (string): The customer's id
+/// 
+/// Returns:
+///   A list of OutputData objects.
     public List<OutputData> PredictionsByCustomer(string customerId)
     {
         List<OutputData> results = new List<OutputData>();
         List<Rack> racks = _rackRespository.GetRacksByCustomerId(customerId);
         foreach (Rack r in racks)
         {
-            var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn);
-            results.Add(new OutputData() { RackId = r.RackId, CustomerId = customerId, Total = predictions.Count, Predictions = predictions });
+            var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn).Count;
+            results.Add(new OutputData() { 
+                RackId = r.RackId, 
+                CustomerId = customerId, 
+                Total = predictions, 
+                Row1 = new Row(){Drinks = r.Row1, 
+                                TakenLeft = _predictionRepository.GetPredictionsLeftRow(r.RackId, r.FilledOn, 1).Count, 
+                                TakenRight = _predictionRepository.GetPredictionsRightRow(r.RackId, r.FilledOn, 1).Count},
+                Row2 = new Row(){Drinks = r.Row2, 
+                                TakenLeft = _predictionRepository.GetPredictionsLeftRow(r.RackId, r.FilledOn, 2).Count, 
+                                TakenRight = _predictionRepository.GetPredictionsRightRow(r.RackId, r.FilledOn, 2).Count},
+                Row3 = new Row(){Drinks = r.Row3, 
+                                TakenLeft = _predictionRepository.GetPredictionsLeftRow(r.RackId, r.FilledOn, 3).Count, 
+                                TakenRight = _predictionRepository.GetPredictionsRightRow(r.RackId, r.FilledOn, 3).Count},
+                Row4 = new Row(){Drinks = r.Row4, 
+                                TakenLeft = _predictionRepository.GetPredictionsLeftRow(r.RackId, r.FilledOn, 4).Count, 
+                                TakenRight = _predictionRepository.GetPredictionsRightRow(r.RackId, r.FilledOn, 4).Count}, 
+                });
         }
         return results;
     }
@@ -70,8 +88,8 @@ public class PredictionService : IPredictionService
         List<Rack> racks = _rackRespository.GetRacksByCustomerId(input.CustomerId);
         foreach (Rack r in racks)
         {
-            var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn);
-            totalPredictions += predictions.Count;
+            var predictionsLeft = _predictionRepository.GetPredictions(r.RackId, r.FilledOn).Count;
+            totalPredictions += predictionsLeft;
         }
         input.Total = totalPredictions;
         return input;
