@@ -13,12 +13,6 @@ let htmlCustomerList, htmlSortButton, htmlCustomerSearch;
 //#region ***  Callback-Visualisation - show___         ***********
 const showCustomers = function () {
   let html = ``;
-  html += `
-                        <button class="o-button-reset c-customer-button c-customer-button_selected js-customer-button" data-customerId=${customerList[0].customerId}>
-                            <p class="o-remove-margin">${customerList[0].name}</p>
-                            <p class="o-remove-margin">${customerList[0].total}</p>
-                        </button>
-  `;
   for (let customer of customerList) {
     html += `
                         <button class="o-button-reset c-customer-button js-customer-button" data-customerId=${customer.customerId}>
@@ -28,6 +22,7 @@ const showCustomers = function () {
   `;
   }
   htmlCustomerList.innerHTML = html;
+  showSelectedCustomer();
   listenToCustomerButton();
 };
 
@@ -43,6 +38,12 @@ const showFilteredCustomers = function (arr) {
   }
   htmlCustomerList.innerHTML = html;
   listenToCustomerButton();
+};
+
+const showSelectedCustomer = function () {
+  let allCustomerBtns = document.querySelectorAll(".js-customer-button");
+  allCustomerBtns[0].classList.add("c-customer-button_selected");
+  previousCustomer = allCustomerBtns[0];
 };
 //#endregion
 
@@ -120,7 +121,7 @@ const listenToCustomerButton = function () {
       this.classList.add("c-customer-button_selected");
       let customerId = this.getAttribute("data-customerId");
       previousCustomer = this;
-      console.log(customerId);
+      
     });
   }
 };
