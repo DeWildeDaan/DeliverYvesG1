@@ -6,7 +6,7 @@ public interface IPredictionService
     Prediction AddPrediction(Prediction newPrediction);
     Task<string> ReloadModel();
     List<OutputData> PredictionsByCustomer(string customerId);
-    int TotalPredictionsByCustomer(string customerId);
+    TotalPredictions TotalPredictionsByCustomer(TotalPredictions totalInput);
 }
 
 public class PredictionService : IPredictionService
@@ -64,16 +64,17 @@ public class PredictionService : IPredictionService
     /// 
     /// Returns:
     ///   The total number of predictions for a customer.
-    public int TotalPredictionsByCustomer(string customerId)
+    public TotalPredictions TotalPredictionsByCustomer(TotalPredictions input)
     {
-        int total = 0;
-        List<Rack> racks = _rackRespository.GetRacksByCustomerId(customerId);
+        int totalPredictions = 0;
+        List<Rack> racks = _rackRespository.GetRacksByCustomerId(input.CustomerId);
         foreach (Rack r in racks)
         {
             var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn);
-            total += predictions.Count;
+            totalPredictions += predictions.Count;
         }
-        return total;
+        input.Total = totalPredictions;
+        return input;
     }
 
 }

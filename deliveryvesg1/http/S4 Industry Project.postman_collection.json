@@ -420,10 +420,19 @@
 				{
 					"name": "Get total predictions per customer",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"Daan\",\r\n    \"CustomerId\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/totalpredictions/1",
+							"raw": "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/totalpredictions",
 							"protocol": "https",
 							"host": [
 								"deliveryevesg1minimalapi",
@@ -433,8 +442,7 @@
 								"io"
 							],
 							"path": [
-								"totalpredictions",
-								"1"
+								"totalpredictions"
 							]
 						}
 					},
