@@ -1,10 +1,10 @@
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 //CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy  =>
+                      policy =>
                       {
                           policy.WithOrigins("https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io",
                                                 "https://deliveryvesg1frontend.livelygrass-d3385627.northeurope.azurecontainerapps.io/",
@@ -144,6 +144,14 @@ app.MapGet("/reloadmodel", async (IPredictionService predictionService) =>
 is injected
 into the route and the `PredictionsByCustomer` method is called. */
 app.MapGet("/predictions/{customerid}", (IPredictionService predictionService, string customerid) =>
+{
+    return Results.Ok(predictionService.PredictionsByCustomer(customerid));
+});
+
+/* This is a route that is mapped to the `/totalpredictions/{customerid}` endpoint. The
+`predictionService` is injected
+into the route and the `PredictionsByCustomer` method is called. */
+app.MapGet("/totalpredictions/{customerid}", (IPredictionService predictionService, string customerid) =>
 {
     return Results.Ok(predictionService.PredictionsByCustomer(customerid));
 });

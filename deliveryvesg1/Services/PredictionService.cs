@@ -36,22 +36,43 @@ public class PredictionService : IPredictionService
         return _predictionRepository.AddPrediction(newPrediction);
     }
 
-/// > Get all the racks for a customer, then get all the predictions for each rack
-/// 
-/// Args:
-///   customerId (string): The customer id of the customer whose racks we want to get predictions for.
-/// 
-/// Returns:
-///   A list of OutputData objects.
+    /// > Get all the racks for a customer, then get all the predictions for each rack
+    /// 
+    /// Args:
+    ///   customerId (string): The customer id of the customer whose racks we want to get predictions for.
+    /// 
+    /// Returns:
+    ///   A list of OutputData objects.
     public List<OutputData> PredictionsByCustomer(string customerId)
     {
-        List<OutputData> results = new List<OutputData>(); 
+        List<OutputData> results = new List<OutputData>();
         List<Rack> racks = _rackRespository.GetRacksByCustomerId(customerId);
-        foreach(Rack r in racks){
+        foreach (Rack r in racks)
+        {
             var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn);
-            results.Add(new OutputData(){RackId = r.RackId, CustomerId = customerId, Total = predictions.Count, Predictions = predictions});
+            results.Add(new OutputData() { RackId = r.RackId, CustomerId = customerId, Total = predictions.Count, Predictions = predictions });
         }
         return results;
     }
-    
+
+    /// It gets all the racks for a customer, then gets all the predictions for each rack, then sums the
+    /// number of predictions
+    /// 
+    /// Args:
+    ///   customerId (string): The customer's id
+    /// 
+    /// Returns:
+    ///   The total number of predictions for a customer.
+    public int TotalPredictionsByCustomer(string customerId)
+    {
+        int total = 0;
+        List<Rack> racks = _rackRespository.GetRacksByCustomerId(customerId);
+        foreach (Rack r in racks)
+        {
+            var predictions = _predictionRepository.GetPredictions(r.RackId, r.FilledOn);
+            total += predictions.Count;
+        }
+        return total;
+    }
+
 }
