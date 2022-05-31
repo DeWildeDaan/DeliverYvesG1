@@ -153,7 +153,8 @@ void loop() {
           Serial.print(" ");
           Serial.println(l_distance_max);
 
-          sendSampleData();
+//          sendSampleData();
+            sendData();
           
           Serial.println("Done");
           Serial.println("");
@@ -208,7 +209,26 @@ void dataClear() {
 
 
 
+void sendData(){
+      http.begin(predictionAPI);
+      http.addHeader("Content-Type", "application/json");
 
+      StaticJsonDocument<256> doc;
+      doc["RackId"] = rack_id;
+      doc["RackRow"] = rack_row;
+      doc["DistMinH"] = h_distance_min;
+      doc["DistMaxH"] = h_distance_max;
+      doc["DistAvgH"] = h_distance_avg;
+      doc["DistMinL"] = l_distance_min;
+      doc["DistMaxL"] = l_distance_max;
+      doc["DistAvgL"] = l_distance_avg;
+      doc["DistTime"] = distance_time;
+
+      String requestBody;
+      serializeJson(doc, requestBody);
+      int httpResponseCode = http.POST(requestBody);
+      http.end();
+}
 
 void sendSampleData(){
   Serial.println(l_distance_avg);
