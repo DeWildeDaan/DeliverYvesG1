@@ -4,10 +4,17 @@ let baseUrl =
 let customerList = [];
 let customers;
 let previousCustomer;
+let customerCounter = 0;
 const treshhold = 1;
 
 //#region ***  DOM references                           ***********
-let htmlCustomerList, htmlSortButton, htmlCustomerSearch, htmlTitle, htmlRacks;
+let htmlCustomerList,
+  htmlSortButton,
+  htmlCustomerSearch,
+  htmlTitle,
+  htmlRacks,
+  htmlNext,
+  htmlPrevious;
 
 //#endregion
 
@@ -58,6 +65,8 @@ const showSelectedCustomer = function (jsonObject) {
                             }>
                                 <p class="o-remove-margin">${
                                   rack.row1.drinks[0]
+                                    ? rack.row1.drinks[0]
+                                    : "Leeg"
                                 }</p>
                                 <p class="o-remove-margin">${
                                   rack.row1.takenLeft + rack.row1.takenRight
@@ -68,13 +77,29 @@ const showSelectedCustomer = function (jsonObject) {
       } else {
         html += `
                           <div class="c-rack-row">
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row1.takenLeft}>
-                                <p class="o-remove-margin">${rack.row1.drinks[0]}</p>
-                                <p class="o-remove-margin">${rack.row1.takenLeft}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row1.takenLeft
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row1.drinks[0]
+                                    ? rack.row1.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row1.takenLeft
+                                }</p>
                             </div>
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row1.takenRight}>
-                                <p class="o-remove-margin">${rack.row1.drinks[1]}</p>
-                                <p class="o-remove-margin">${rack.row1.takenRight}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row1.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row1.drinks[1]
+                                    ? rack.row1.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row1.takenRight
+                                }</p>
                             </div>
                           </div>
         `;
@@ -87,6 +112,8 @@ const showSelectedCustomer = function (jsonObject) {
                             }>
                                 <p class="o-remove-margin">${
                                   rack.row2.drinks[0]
+                                    ? rack.row2.drinks[0]
+                                    : "Leeg"
                                 }</p>
                                 <p class="o-remove-margin">${
                                   rack.row2.takenLeft + rack.row2.takenRight
@@ -97,13 +124,29 @@ const showSelectedCustomer = function (jsonObject) {
       } else {
         html += `
                           <div class="c-rack-row">
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row2.takenLeft}>
-                                <p class="o-remove-margin">${rack.row2.drinks[0]}</p>
-                                <p class="o-remove-margin">${rack.row2.takenLeft}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row2.takenLeft
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row2.drinks[0]
+                                    ? rack.row2.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row2.takenLeft
+                                }</p>
                             </div>
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row2.takenRight}>
-                                <p class="o-remove-margin">${rack.row2.drinks[1]}</p>
-                                <p class="o-remove-margin">${rack.row2.takenRight}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row2.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row2.drinks[1]
+                                    ? rack.row2.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row2.takenRight
+                                }</p>
                             </div>
                           </div>
         `;
@@ -116,6 +159,8 @@ const showSelectedCustomer = function (jsonObject) {
                             }>
                                 <p class="o-remove-margin">${
                                   rack.row3.drinks[0]
+                                    ? rack.row3.drinks[0]
+                                    : "Leeg"
                                 }</p>
                                 <p class="o-remove-margin">${
                                   rack.row3.takenLeft + rack.row3.takenRight
@@ -126,13 +171,29 @@ const showSelectedCustomer = function (jsonObject) {
       } else {
         html += `
                           <div class="c-rack-row">
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row3.takenLeft}>
-                                <p class="o-remove-margin">${rack.row3.drinks[0]}</p>
-                                <p class="o-remove-margin">${rack.row3.takenLeft}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row3.takenLeft
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row3.drinks[0]
+                                    ? rack.row3.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row3.takenLeft
+                                }</p>
                             </div>
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row3.takenRight}>
-                                <p class="o-remove-margin">${rack.row3.drinks[1]}</p>
-                                <p class="o-remove-margin">${rack.row3.takenRight}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row3.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row3.drinks[1]
+                                    ? rack.row3.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row3.takenRight
+                                }</p>
                             </div>
                           </div>
         `;
@@ -145,6 +206,8 @@ const showSelectedCustomer = function (jsonObject) {
                             }>
                                 <p class="o-remove-margin">${
                                   rack.row4.drinks[0]
+                                    ? rack.row4.drinks[0]
+                                    : "Leeg"
                                 }</p>
                                 <p class="o-remove-margin">${
                                   rack.row4.takenLeft + rack.row4.takenRight
@@ -155,13 +218,29 @@ const showSelectedCustomer = function (jsonObject) {
       } else {
         html += `
                           <div class="c-rack-row">
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row4.takenLeft}>
-                                <p class="o-remove-margin">${rack.row4.drinks[0]}</p>
-                                <p class="o-remove-margin">${rack.row4.takenLeft}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row4.takenLeft
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row4.drinks[0]
+                                    ? rack.row4.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row4.takenLeft
+                                }</p>
                             </div>
-                            <div class="c-rack-row-item js-rack" data-total=${rack.row4.takenRight}>
-                                <p class="o-remove-margin">${rack.row4.drinks[1]}</p>
-                                <p class="o-remove-margin">${rack.row4.takenRight}</p>
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row4.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row4.drinks[1]
+                                    ? rack.row4.drinks[0]
+                                    : "Leeg"
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row4.takenRight
+                                }</p>
                             </div>
                           </div>
         `;
@@ -208,9 +287,10 @@ const callbackTotalPredictions = function (jsonObject) {
 
 const callbackGetSelectedCustomer = function () {
   let allCustomerBtns = document.querySelectorAll(".js-customer-button");
-  allCustomerBtns[0].classList.add("c-customer-button_selected");
-  let customerId = allCustomerBtns[0].getAttribute("data-customerId");
-  previousCustomer = allCustomerBtns[0];
+  allCustomerBtns[customerCounter].classList.add("c-customer-button_selected");
+  let customerId =
+    allCustomerBtns[customerCounter].getAttribute("data-customerId");
+  previousCustomer = allCustomerBtns[customerCounter];
   getPredictionsCustomer(customerId);
 };
 
@@ -248,6 +328,7 @@ const listenToSortButton = function () {
     htmlSortButton.classList.toggle("c-title-left_arrow-flip");
     customerList.reverse();
     htmlCustomerSearch.value = "";
+    customerCounter = 0;
     showCustomers();
   });
 };
@@ -275,6 +356,28 @@ const listenToCustomerButton = function () {
     });
   }
 };
+
+const listenToNext = function () {
+  htmlNext.addEventListener("click", function () {
+    customerCounter++;
+    if (customerCounter > customerList.length - 1) {
+      customerCounter = 0;
+    }
+    previousCustomer.classList.remove("c-customer-button_selected");
+    callbackGetSelectedCustomer();
+  });
+};
+
+const listenToPrevious = function () {
+  htmlPrevious.addEventListener("click", function () {
+    customerCounter--;
+    if (customerCounter < 0) {
+      customerCounter = customerList.length - 1;
+    }
+    previousCustomer.classList.remove("c-customer-button_selected");
+    callbackGetSelectedCustomer();
+  });
+};
 // Event listeners
 
 //#region ***  Init / DOMContentLoaded                  ***********
@@ -285,11 +388,15 @@ const init = function () {
   htmlCustomerSearch = document.querySelector(".js-search");
   htmlTitle = document.querySelector(".js-title");
   htmlRacks = document.querySelector(".js-racks");
+  htmlNext = document.querySelector(".js-next");
+  htmlPrevious = document.querySelector(".js-previous");
 
   getCustomers();
 
   listenToSortButton();
   listenToCustomerSearch();
+  listenToNext();
+  listenToPrevious();
 };
 
 document.addEventListener("DOMContentLoaded", init);
