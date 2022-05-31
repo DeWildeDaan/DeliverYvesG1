@@ -4,9 +4,10 @@ let baseUrl =
 let customerList = [];
 let customers;
 let previousCustomer;
+const treshhold = 1;
 
 //#region ***  DOM references                           ***********
-let htmlCustomerList, htmlSortButton, htmlCustomerSearch;
+let htmlCustomerList, htmlSortButton, htmlCustomerSearch, htmlTitle, htmlRacks;
 
 //#endregion
 
@@ -22,7 +23,7 @@ const showCustomers = function () {
   `;
   }
   htmlCustomerList.innerHTML = html;
-  showSelectedCustomer();
+  callbackGetSelectedCustomer();
   listenToCustomerButton();
 };
 
@@ -40,12 +41,147 @@ const showFilteredCustomers = function (arr) {
   listenToCustomerButton();
 };
 
-const showSelectedCustomer = function () {
-  let allCustomerBtns = document.querySelectorAll(".js-customer-button");
-  allCustomerBtns[0].classList.add("c-customer-button_selected");
-  let customerId = allCustomerBtns[0].getAttribute("data-customerId");
-  previousCustomer = allCustomerBtns[0];
-  getPredictionsCustomer(customerId);
+const showSelectedCustomer = function (jsonObject) {
+  if (jsonObject.length >= 1) {
+    let arr = customerList.filter(function (elem) {
+      return elem.customerId == jsonObject[0].customerId;
+    });
+    htmlTitle.innerHTML = `${arr[0].name}`;
+    let html = ``;
+    for (let rack of jsonObject) {
+      html += `<div class="c-rack">`;
+      if (rack.row1.drinks.length == 1) {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row1.takenLeft + rack.row1.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row1.drinks[0]
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row1.takenLeft + rack.row1.takenRight
+                                }</p>
+                            </div>
+                          </div>
+        `;
+      } else {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row1.takenLeft}>
+                                <p class="o-remove-margin">${rack.row1.drinks[0]}</p>
+                                <p class="o-remove-margin">${rack.row1.takenLeft}</p>
+                            </div>
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row1.takenRight}>
+                                <p class="o-remove-margin">${rack.row1.drinks[1]}</p>
+                                <p class="o-remove-margin">${rack.row1.takenRight}</p>
+                            </div>
+                          </div>
+        `;
+      }
+      if (rack.row2.drinks.length == 1) {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row2.takenLeft + rack.row2.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row2.drinks[0]
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row2.takenLeft + rack.row2.takenRight
+                                }</p>
+                            </div>
+                          </div>
+        `;
+      } else {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row2.takenLeft}>
+                                <p class="o-remove-margin">${rack.row2.drinks[0]}</p>
+                                <p class="o-remove-margin">${rack.row2.takenLeft}</p>
+                            </div>
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row2.takenRight}>
+                                <p class="o-remove-margin">${rack.row2.drinks[1]}</p>
+                                <p class="o-remove-margin">${rack.row2.takenRight}</p>
+                            </div>
+                          </div>
+        `;
+      }
+      if (rack.row3.drinks.length == 1) {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row3.takenLeft + rack.row3.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row3.drinks[0]
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row3.takenLeft + rack.row3.takenRight
+                                }</p>
+                            </div>
+                          </div>
+        `;
+      } else {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row3.takenLeft}>
+                                <p class="o-remove-margin">${rack.row3.drinks[0]}</p>
+                                <p class="o-remove-margin">${rack.row3.takenLeft}</p>
+                            </div>
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row3.takenRight}>
+                                <p class="o-remove-margin">${rack.row3.drinks[1]}</p>
+                                <p class="o-remove-margin">${rack.row3.takenRight}</p>
+                            </div>
+                          </div>
+        `;
+      }
+      if (rack.row4.drinks.length == 1) {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${
+                              rack.row4.takenLeft + rack.row4.takenRight
+                            }>
+                                <p class="o-remove-margin">${
+                                  rack.row4.drinks[0]
+                                }</p>
+                                <p class="o-remove-margin">${
+                                  rack.row4.takenLeft + rack.row4.takenRight
+                                }</p>
+                            </div>
+                          </div>
+        `;
+      } else {
+        html += `
+                          <div class="c-rack-row">
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row4.takenLeft}>
+                                <p class="o-remove-margin">${rack.row4.drinks[0]}</p>
+                                <p class="o-remove-margin">${rack.row4.takenLeft}</p>
+                            </div>
+                            <div class="c-rack-row-item js-rack" data-total=${rack.row4.takenRight}>
+                                <p class="o-remove-margin">${rack.row4.drinks[1]}</p>
+                                <p class="o-remove-margin">${rack.row4.takenRight}</p>
+                            </div>
+                          </div>
+        `;
+      }
+      html += `</div>`;
+    }
+    htmlRacks.innerHTML = html;
+    showUnavailableRacks();
+  } else {
+    htmlTitle.innerHTML = `Geen rekken`;
+    htmlRacks.innerHTML = ``;
+  }
+};
+
+const showUnavailableRacks = function () {
+  for (let item of document.querySelectorAll(".js-rack")) {
+    if (item.getAttribute("data-total") >= treshhold) {
+      item.classList.add("c-rack-row-item_unavailable");
+    }
+  }
 };
 //#endregion
 
@@ -70,6 +206,14 @@ const callbackTotalPredictions = function (jsonObject) {
   }
 };
 
+const callbackGetSelectedCustomer = function () {
+  let allCustomerBtns = document.querySelectorAll(".js-customer-button");
+  allCustomerBtns[0].classList.add("c-customer-button_selected");
+  let customerId = allCustomerBtns[0].getAttribute("data-customerId");
+  previousCustomer = allCustomerBtns[0];
+  getPredictionsCustomer(customerId);
+};
+
 //#endregion
 
 //#region ***  Data Access - get___                     ***********
@@ -78,6 +222,7 @@ const getCustomers = function () {
   customers = [
     { Name: "daan", Id: "1" },
     { Name: "alec", Id: "2" },
+    { Name: "dominic", Id: "3" },
   ];
   callbackCustomers(customers);
 };
@@ -92,7 +237,8 @@ const getTotalPredictions = function (customerId, name) {
 };
 
 const getPredictionsCustomer = function (customerId) {
-  console.log(customerId);
+  let url = `${baseUrl}/predictions/${customerId}`;
+  handleData(url, showSelectedCustomer, callbackError, "GET");
 };
 //#endregion
 
@@ -137,6 +283,8 @@ const init = function () {
   htmlCustomerList = document.querySelector(".js-customer-list");
   htmlSortButton = document.querySelector(".js-sort-button");
   htmlCustomerSearch = document.querySelector(".js-search");
+  htmlTitle = document.querySelector(".js-title");
+  htmlRacks = document.querySelector(".js-racks");
 
   getCustomers();
 
