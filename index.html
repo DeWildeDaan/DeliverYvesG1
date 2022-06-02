@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <header class="c-header_background">
+    <header>
         <div class="c-header">
             <div class="c-logo">
                 <svg class="c-logo_symbol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1022 195">
@@ -48,6 +48,10 @@
                 </svg>
             </div>
 
+            <form class="c-form">
+                <input class="c-input js-search" type="search" placeholder="Search...">
+            </form>
+
             <div class="c-nav">
                 <a class="c-nav_btn c-nav_btn-selected" href="index.html">Klanten</a>
                 <a class="c-nav_btn" href="manage.html">Rekken beheren</a>
@@ -58,13 +62,9 @@
     <section>
         <div class="c-split c-left">
             <div class="c-left-body">
-                <form class="c-form">
-                    <input class="c-input js-search" type="search" placeholder="Search...">
-                </form>
-
 
                 <div class="c-title-left">
-                    <p class="o-remove-margin">Klant</p>
+                    <p class="o-remove-margin">Overzicht klanten</p>
                     <div class="c-title-left_item">
                         <p class="o-remove-margin">Lege flesjes</p>
                         <button class="js-sort-button o-button-reset c-title-left_arrow">
@@ -73,7 +73,7 @@
                                 <rect id="Path" width="24" height="24" fill="none" />
                                 <path id="arrow-down-Bold_1_"
                                     d="M942.707,1832.707l-7,7a1,1,0,0,1-1.414,0l-7-7a1,1,0,1,1,1.414-1.414l5.293,5.293V1821a1,1,0,0,1,2,0v15.586l5.293-5.293a1,1,0,1,1,1.414,1.414Z"
-                                    transform="translate(-923 -1818)" fill="#fff9f4" />
+                                    transform="translate(-923 -1818)" fill="#0084A4" />
                             </svg>
                         </button>
                     </div>
@@ -101,11 +101,9 @@
                                 d="M942.707,1832.707l-7,7a1,1,0,0,1-1.414,0l-7-7a1,1,0,1,1,1.414-1.414l5.293,5.293V1821a1,1,0,0,1,2,0v15.586l5.293-5.293a1,1,0,1,1,1.414,1.414Z"
                                 transform="translate(-923 -1818)" fill="#fff9f4" />
                         </svg>
-                        Vorige
                     </button>
-                    <p class="o-remove-margin c-title-right-text js-title">0801 | Daan</p>
+                    <p class="o-remove-margin c-title-right-text js-title">Daan</p>
                     <button class="o-button-reset c-title-right-btn js-next">
-                        Volgende
                         <svg class="c-title-right-arr_right" id="arrow-down-Bold" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24">
                             <rect id="Path" width="24" height="24" fill="none" />
@@ -117,7 +115,7 @@
                 </div>
 
                 <div class="c-racks js-racks">
-                    <div class="c-rack">
+                    <!-- <div class="c-rack">
                         <div class="c-rack-row">
                             <div class="c-rack-row-item">
                                 <p class="o-remove-margin">Cola</p>
@@ -155,187 +153,7 @@
                                 <p class="o-remove-margin">5</p>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="c-rack">
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-
-                            <div class="c-rack-row-item c-rack-row-item_unavailable">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="c-rack">
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-
-                            <div class="c-rack-row-item c-rack-row-item_unavailable">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="c-rack">
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-
-                            <div class="c-rack-row-item c-rack-row-item_unavailable">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="c-rack">
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-
-                            <div class="c-rack-row-item c-rack-row-item_unavailable">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item c-rack-row-item_unavailable">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="c-rack">
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-
-                            <div class="c-rack-row-item c-rack-row-item_unavailable">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-
-                        <div class="c-rack-row">
-                            <div class="c-rack-row-item">
-                                <p class="o-remove-margin">Cola</p>
-                                <p class="o-remove-margin">5</p>
-                            </div>
-                        </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
