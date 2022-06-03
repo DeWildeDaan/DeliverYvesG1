@@ -47,10 +47,11 @@ def predict_position(input):
     """
     global model
     if model:
-        data = np.array([[input.DistMinH, input.DistMaxH, input.DistAvgH, input.DistMinL,
-                        input.DistMaxL, input.DistAvgL, input.DistTime, 0.9978, 3.51, 0.58, 9.4]])
+        data = np.array([[input.DistMinH,input.DistMaxH,input.DistAvgH,input.DistMinL,input.DistMaxL,input.DistAvgL,input.DistTime]])
+        #data = np.array([[input.DistMinH, input.DistMaxH, input.DistAvgH, input.DistMinL,
+                        #input.DistMaxL, input.DistAvgL, input.DistTime, 0.9978, 3.51, 0.58, 9.4]])
         result = model.predict(data)
-        return post_prediction(input.RackId, input.Row, result)
+        return post_prediction(input.RackId, input.Row, result[0])
     else:
         return 0
 

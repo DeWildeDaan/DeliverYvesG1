@@ -416,6 +416,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get total predictions per customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"Daan\",\r\n    \"CustomerId\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/totalpredictions",
+							"protocol": "https",
+							"host": [
+								"deliveryevesg1minimalapi",
+								"livelygrass-d3385627",
+								"northeurope",
+								"azurecontainerapps",
+								"io"
+							],
+							"path": [
+								"totalpredictions"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "All API requests for the .NET6 Minimal API"

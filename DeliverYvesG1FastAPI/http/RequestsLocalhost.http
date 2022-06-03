@@ -130,11 +130,11 @@ GET http://localhost:8000/ HTTP/1.1
 Content-Type: application/json
 ###
 
-GET http://localhost:8000/ HTTP/1.1
+GET http://localhost:8000/reload HTTP/1.1
 Content-Type: application/json
 ###
 
-POST http://localhost:8000/prediction HTTP/1.1
+POST http://localhost:8000/predict HTTP/1.1
 Content-Type: application/json
 
 {
