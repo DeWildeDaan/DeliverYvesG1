@@ -1,4 +1,3 @@
-// Libraries
 #include <WiFi.h>
 #include <WiFiManager.h>
 #include <HTTPClient.h>
@@ -21,38 +20,35 @@ int h_distance_avg = 0;
 int l_distance_min;
 int l_distance_max;
 int l_distance_avg = 0;
-float weight_previous = 0;
-float weight_post = 0;
-float weight_differental = 0;
 float distance_time;
-
 String rack_id = "";
-int rack_row = 2;
+int rack_row = 3;
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
-String sampleDataAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/sampledata";
 String predictionAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/predict";
 String restockAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/restock" + rack_id;
 String rackIdAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/racks/" + rack_id;
-
 
 // Wifi
 WiFiManager wifiManager;
 HTTPClient http;
 
-
 // Timer
 long timer_detection;
 long timer_first = 0;
-int timer_delay = 80;
+int timer_delay = 50;
 
 // Misc
 bool detection = false;
 int selected = 0;
 
 
-
 void setup() {
   Serial.begin(9600);
+  pinMode(2, OUTPUT);
+  pinMode(pin_h_trigger, OUTPUT);
+  pinMode(pin_l_trigger, OUTPUT);
+  pinMode(pin_h_echo, INPUT);
+  pinMode(pin_l_echo, INPUT);
   
   wifiManager.setDebugOutput(true);
   std::vector<const char *> menu = {"wifi"};
@@ -61,16 +57,8 @@ void setup() {
   wifiManager.autoConnect("DeliverYvesRek");
   rack_id = WiFi.macAddress();
   postRackId();
-  
-  pinMode(2, OUTPUT);
-  pinMode(pin_h_trigger, OUTPUT);
-  pinMode(pin_l_trigger, OUTPUT);
-  pinMode(pin_h_echo, INPUT);
-  pinMode(pin_l_echo, INPUT);
 
   startupSequence();
-
-  gatheringSelected();
 }
 
 void loop() {
@@ -97,10 +85,11 @@ void loop() {
         timer_detection = millis();
         ultrasonic_counter += 1;  
 
+        
         Serial.print(h_distance);
         Serial.print(" ");
         Serial.println(l_distance);
-  
+        
         h_distance_avg += h_distance;
         l_distance_avg += l_distance;
   
@@ -130,37 +119,15 @@ void loop() {
           
           digitalWrite(2, LOW);
           detection = false;
-//          timer_delay = 0;
 
           
-          Serial.print("Counter ");
-          Serial.println(ultrasonic_counter);
-          Serial.print("Time ");
-          Serial.println(distance_time);
           
-          Serial.print("Distance avg ");
-          Serial.print(h_distance_avg);
-          Serial.print(" ");
-          Serial.println(l_distance_avg);
-//
-          Serial.print("Distance min ");
-          Serial.print(h_distance_min);
-          Serial.print(" ");
-          Serial.println(l_distance_min);
+          sendData();
+          dataClear();
 
-          Serial.print("Distance max ");
-          Serial.print(h_distance_max);
-          Serial.print(" ");
-          Serial.println(l_distance_max);
-
-//          sendSampleData();
-            sendData();
           
           Serial.println("Done");
           Serial.println("");
-
-          dataClear();
-          gatheringSelected();
          }  
       } else {
         if (millis() - timer_detection > 3000) {
@@ -175,18 +142,6 @@ void loop() {
   }
 }
 
-
-void gatheringSelected() {
-  if (selected == 24) {
-    selected = 1;  
-  } else {
-    selected++;  
-  }
-
-  Serial.print("Grab bottle: ");
-  Serial.println(selected);
-}
-
 void dataClear() {
   h_distance_min = 0;
   h_distance_max = 0;
@@ -194,28 +149,23 @@ void dataClear() {
   l_distance_min = 0;
   l_distance_max = 0;
   l_distance_avg = 0;
-  weight_previous = 0;
-  weight_post = 0;
-  weight_differental = 0;
   distance_time = 0;
 
   timer_first = 0;
   ultrasonic_counter = 0;
 }
 
-
-
-
-
-
-
 void sendData(){
+      
+          Serial.println(rack_id);
+          Serial.println("");
+  
       http.begin(predictionAPI);
       http.addHeader("Content-Type", "application/json");
 
-      StaticJsonDocument<256> doc;
+      StaticJsonDocument<512> doc;
       doc["RackId"] = rack_id;
-      doc["RackRow"] = rack_row;
+      doc["Row"] = rack_row;
       doc["DistMinH"] = h_distance_min;
       doc["DistMaxH"] = h_distance_max;
       doc["DistAvgH"] = h_distance_avg;
@@ -228,34 +178,10 @@ void sendData(){
       serializeJson(doc, requestBody);
       int httpResponseCode = http.POST(requestBody);
       http.end();
-}
 
-void sendSampleData(){
-  Serial.println(l_distance_avg);
-  Serial.println(distance_time);
-  
-  http.begin(sampleDataAPI);
-  http.addHeader("Content-Type", "application/json");
-
-  StaticJsonDocument<256> doc;
-  doc["RackId"] = rack_id;
-  doc["RackRow"] = rack_row;
-  doc["Label"] = selected;
-  doc["WeightPre"] = weight_previous;
-  doc["WeightPost"] = weight_post;
-  doc["WeightDiff"] = weight_differental;
-  doc["DistMinH"] = h_distance_min;
-  doc["DistMaxH"] = h_distance_max;
-  doc["DistAvgH"] = h_distance_avg;
-  doc["DistMinL"] = l_distance_min;
-  doc["DistMaxL"] = l_distance_max;
-  doc["DistAvgL"] = l_distance_avg;
-  doc["DistTime"] = distance_time;
-
-  String requestBody;
-  serializeJson(doc, requestBody);
-  int httpResponseCode = http.POST(requestBody);
-  http.end();
+      
+          Serial.println(requestBody);
+          Serial.println(httpResponseCode);
 }
 
 void postRackId(){
@@ -272,14 +198,6 @@ void postRackId(){
     http.end();
   }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -322,15 +240,14 @@ void ultrasonicDetection(int *h_distance, int *l_distance) {
 }
 
 void startupSequence() {
-  for (int i = 0; i < 10; i++) {
-    ultrasonic_threshold += ultrasonicDistance(pin_h_trigger, pin_h_echo);
-    ultrasonic_threshold += ultrasonicDistance(pin_l_trigger, pin_l_echo);
-    delay(20);
+  int threshold_h = 0;
+  int threshold_l = 0;
+  while (threshold_h == 0 && threshold_l == 0) {
+    threshold_h = ultrasonicDistance(pin_h_trigger, pin_h_echo);
+    threshold_l = ultrasonicDistance(pin_l_trigger, pin_l_echo);
+    delay(80);
   }
-  ultrasonic_threshold = (ultrasonic_threshold / 20) - 5;
-
-  Serial.print("Threshold: ");
-  Serial.println(ultrasonic_threshold);
+  ultrasonic_threshold = ((threshold_h + threshold_l) / 2) - 5;
 }
 
 int ultrasonicDistance(int pin_trigger, int pin_echo) {
