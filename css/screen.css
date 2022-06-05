@@ -29,7 +29,10 @@
    --global-whitespace-lg: calc(var(--global-baseline) * 4); /*  = 32px */
    --global-whitespace-xl: calc(var(--global-whitespace) * 2); /*  = 48px */
    --global-whitespace-xxl: calc(var(--global-whitespace) * 3); /*  = 72px */
- 
+
+   /* transitions */
+   --global-transitionEasing-out: ease-out;
+   --global-transitionDuration-alpha: .1s;
  }
  
  /*------------------------------------*\
@@ -161,6 +164,7 @@
  table{
     max-width: 100%;
     font-size: 0.80rem;
+    text-align: center;
  }
 
  th, td{
@@ -511,6 +515,112 @@
 }
 
 /*
+    Custom option
+    ---
+    Custom checkboxes & radio buttons
+*/
+
+/* Hide the actual input with the class .o-hide-accessible */
+
+.c-custom-option {
+    --custom-option-background: var(--global-color-neutral);
+    --custom-option-borderRadius: var(--global-borderRadiusSoft);
+    --custom-option-borderWidth: var(--global-borderWidth);
+    --custom-option-borderColor: var(--global-color-light);
+    --custom-option-hover-borderColor: var(--global-color-neural-dark);
+    --custom-option-focus-borderColor: var(--global-color-neural-dark);
+    --custom-option__symbol-fill: var(--global-color-accent1);
+    --custom-option-transition: var(--global-transitionDuration-alpha) var(--global-transitionEasing-out);
+    display: flex;
+    align-items: center;
+    gap: var(--global-whitespace-sm);
+    margin-left: 0.25rem;
+}
+
+.c-custom-option__fake-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    background: var(--custom-option-background);
+    border: var(--custom-option-borderWidth) solid var(--custom-option-borderColor);
+    transition: all var(--custom-option-transition);
+}
+
+.c-custom-option__fake-input--checkbox {
+    border-radius: var(--custom-option-borderRadius);
+}
+
+.c-custom-option__fake-input--radio {
+    border-radius: 100%;
+}
+
+.c-custom-option__symbol {
+    display: block;
+    opacity: 0; /* Hide the symbol initially */
+    transform: scale(.5);
+    transition: transform var(--custom-option-transition), opacity var(--custom-option-transition);
+}
+
+.c-custom-option__fake-input--checkbox .c-custom-option__symbol {
+    width: .625rem;
+    height: .625rem;
+    fill: var(--custom-option__symbol-fill);
+}
+
+.c-custom-option__fake-input--radio .c-custom-option__symbol {
+    background-color: var(--custom-option__symbol-fill);
+    border-radius: 100%;
+    width: .375rem;
+    height: .375rem;
+}
+
+/* hover state */
+
+.c-custom-option:hover {
+    --custom-option-borderColor: var(--custom-option-hover-borderColor);
+}
+
+/* focused and active state */
+
+.c-option--hidden:focus-visible + .c-custom-option {
+    --custom-option-borderColor: var(--custom-option-focus-borderColor);
+    --custom-option-boxShadow: var(--custom-option-focus-boxShadow);
+}
+
+/* checked state */
+.c-option--hidden:checked + .c-custom-option {
+    --custom-option-borderColor: var(--custom-option-focus-borderColor);
+}
+
+.c-option--hidden:checked + .c-custom-option .c-custom-option__symbol {
+    opacity: 1; /* Show the symbol when the invisible checkbox/radio button is checked */
+    transform: scale(1);
+}
+
+.c-option--hidden:checked + .c-custom-option .c-custom-option__fake-input--checkbox {
+    --custom-option-background: var(--global-color-accent1);
+    --custom-option__symbol-fill: var(--global-color-neutral);
+}
+
+/* Component: label */
+
+.c-label {
+    font-weight: 500;
+    line-height: calc(var(--global-baseline) * 2);
+    color: var(--label-color, var(--global-label-color));
+    margin-bottom: 0;
+    padding-bottom: var(--global-whitespace-sm);            
+}
+
+.c-label--option {
+    font-weight: 400;
+    color: var(--global-page-color);
+    padding-bottom: 0;
+}
+
+/*
     Component: title
     ---
     Title, left side
@@ -699,6 +809,7 @@
 }
 .c-title-main-manage{
     color: var(--global-color-accent1);
+    margin: 2rem 0 0.5rem 0;
     font-size: 1.5rem;
     font-weight: 600;
     
@@ -710,10 +821,13 @@
 }
 
 .c-new-customer-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: var(--global-color-accent1);
-    border-radius: var(--global-borderRadiusHard);
+    border-radius: var(--global-borderRadiusSoft);
     color: var(--global-color-neutral);
-    padding: 0.5rem;
+    padding: 0.1rem 0.25rem;
 }
 
 .c-new-customer-btn:hover, .c-new-customer-btn:focus, .c-new-customer-btn:active{
@@ -737,6 +851,11 @@
 .c-manage-button:hover, .c-manage-button:focus, .c-manage-button:active{
     opacity: 0.8;
     cursor: pointer;
+}
+
+.c-manage-button:disabled{
+    opacity: 0.8;
+    cursor:not-allowed;
 }
 
   /*

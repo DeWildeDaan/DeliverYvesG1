@@ -2,9 +2,10 @@
 let baseUrl =
   "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io";
 let customerList, customerRacks;
+let selectedRacks = [];
 
 //#region ***  DOM references                           ***********
-let htmlEmptyRacks, htmlRacks, htmlCustomerSearch;
+let htmlEmptyRacks, htmlRacks, htmlCustomerSearch, htmlDeleteButton;
 //#endregion
 
 //#region ***  Callback-Visualisation - show___         ***********
@@ -33,7 +34,10 @@ const showEmptyRacks = function (jsonObject) {
                     </td>
                     <td>
                         <div class="c-dropdown">
-                            <button class="js-choose-customer o-button-reset c-new-customer-btn" data-rackId=${rack.RackId}>Kies een klant</button>
+                            <button class="js-choose-customer o-button-reset c-new-customer-btn" data-rackId=${rack.RackId}>
+                            Kies een klant
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFF9F4"><path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
+                            </button>
                             <div class="c-dropdown-content js-dropdown-${rack.RackId}">
                                 <input class="c-dropdown-input js-dropdown-search" type="text" placeholder="Search.."
                                     >
@@ -82,6 +86,17 @@ const showRacks = function (arrRacks) {
             <table>
                 <tr>
                     <th>
+                      <button class="o-button-reset c-manage-button js-delete-button" disabled>
+                          <svg id="delete_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                              viewBox="0 0 24 24">
+                              <path id="Path_3150" data-name="Path 3150" d="M0,0H24V24H0Z" fill="none" />
+                              <path id="Path_3151" data-name="Path 3151"
+                                  d="M16,9V19H8V9h8M14.5,3h-5l-1,1H5V6H19V4H15.5ZM18,7H6V19a2.006,2.006,0,0,0,2,2h8a2.006,2.006,0,0,0,2-2Z"
+                                  fill="#5E5A59" />
+                          </svg>
+                      </button>
+                    </th>
+                    <th>
                         <p class="o-remove-margin c-title-manage">Rek id</p>
 
                     </th>
@@ -102,6 +117,7 @@ const showRacks = function (arrRacks) {
                     <th>
                         <p class="o-remove-margin c-title-manage">Rij 4</p>
                     </th>
+                    <th>&nbsp</th>
                 </tr>
   `;
   for (let rack of arrRacks) {
@@ -110,6 +126,25 @@ const showRacks = function (arrRacks) {
     });
     html += `
     <tr>
+                    <td>
+                        <input class="js-chekcbox o-hide-accessible c-option c-option--hidden" type="checkbox" id="checkbox${
+                          rack.rackId
+                        }" data-rackId=${
+                          rack.rackId
+                        }>
+                        <label class="c-label c-label--option c-custom-option" for="checkbox${
+                          rack.rackId
+                        }">
+                            <span class="c-custom-option__fake-input c-custom-option__fake-input--checkbox">
+                                <svg class="c-custom-option__symbol" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 9 6.75">
+                                    <path
+                                        d="M4.75,9.5a1,1,0,0,1-.707-.293l-2.25-2.25A1,1,0,1,1,3.207,5.543L4.75,7.086,8.793,3.043a1,1,0,0,1,1.414,1.414l-4.75,4.75A1,1,0,0,1,4.75,9.5"
+                                        transform="translate(-1.5 -2.75)" />
+                                </svg>
+                            </span>
+                        </label>
+                    </td>
                     <td>
                         <p class="o-remove-margin">${rack.rackId}</p>
                     </td>
@@ -150,26 +185,17 @@ const showRacks = function (arrRacks) {
                           </svg>
                         </button>
                     </td>
-                    <td>
-                        <button class="o-button-reset c-manage-button js-delete-rack-button" data-rackId=${
-                          rack.rackId
-                        }>
-                            <svg id="delete_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24">
-                                <path id="Path_3150" data-name="Path 3150" d="M0,0H24V24H0Z" fill="none" />
-                                <path id="Path_3151" data-name="Path 3151"
-                                    d="M16,9V19H8V9h8M14.5,3h-5l-1,1H5V6H19V4H15.5ZM18,7H6V19a2.006,2.006,0,0,0,2,2h8a2.006,2.006,0,0,0,2-2Z"
-                                    fill="#0084a4" />
-                            </svg>
-                        </button>
-                    </td>
+                    
                 </tr>
     `;
   }
   html += `</table>`;
   htmlRacks.innerHTML = html;
+
+  htmlDeleteButton = document.querySelector(".js-delete-button");
   listenToSaveButton();
   listenToDeleteButton();
+  listenToCheckBox();
 };
 
 const showFilteredRacks = function (arrCustomers) {
@@ -309,13 +335,33 @@ const listenToSaveButton = function () {
   }
 };
 
-const listenToDeleteButton = function () {
-  for (const b of document.querySelectorAll(".js-delete-rack-button")) {
-    b.addEventListener("click", function () {
+const listenToCheckBox = function () {
+  for (const b of document.querySelectorAll(".js-chekcbox")) {
+    b.addEventListener("change", function () {
       let rackId = this.getAttribute("data-rackId");
-      callbackDeleteRack(rackId);
+      if (this.checked) {
+        selectedRacks.push(rackId);
+      } else {
+        let index = selectedRacks.indexOf(rackId);
+        if (index > -1) {
+          selectedRacks.splice(index, 1);
+        }
+      }
+      if (selectedRacks.length > 0) {
+        htmlDeleteButton.disabled = false;
+      } else {
+        htmlDeleteButton.disabled = true;
+      }
     });
   }
+};
+
+const listenToDeleteButton = function () {
+  htmlDeleteButton.addEventListener("click", function () {
+    for (let rackId of selectedRacks) {
+      callbackDeleteRack(rackId);
+    }
+  });
 };
 
 const listenToCustomerSearch = function () {
@@ -329,6 +375,7 @@ const listenToCustomerSearch = function () {
     showFilteredRacks(arr);
   });
 };
+
 // Event listeners
 
 //#region ***  Init / DOMContentLoaded                  ***********
