@@ -695,18 +695,18 @@
 .c-manage-racks{
     width: 100%;
     height: 100%;
-    margin: 1rem;
+    margin: 1.5rem;
 }
 .c-title-main-manage{
     color: var(--global-color-accent1);
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
     
 }
 
 .c-title-manage{
     color: var(--global-color-neural-dark);
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
 
 .c-new-customer-btn{

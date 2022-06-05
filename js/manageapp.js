@@ -1,10 +1,10 @@
 "use strict";
 let baseUrl =
   "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io";
-let customerList;
+let customerList, customerRacks;
 
 //#region ***  DOM references                           ***********
-let htmlEmptyRacks, htmlRacks;
+let htmlEmptyRacks, htmlRacks, htmlCustomerSearch;
 //#endregion
 
 //#region ***  Callback-Visualisation - show___         ***********
@@ -62,11 +62,11 @@ const showDropdown = function (rackId) {
   showDropdownCustomers(customerList);
 };
 
-const showDropdownCustomers = function (arrcustomers) {
+const showDropdownCustomers = function (arrCustomers) {
   for (const b of document.querySelectorAll(".js-dropdown-customers")) {
     let html = ``;
     let rackId = b.getAttribute("data-rackId");
-    for (let customer of arrcustomers) {
+    for (let customer of arrCustomers) {
       html += `<button class="c-dropdown-content-button o-button-reset js-dropdown-customer-btn" data-rackId=${rackId} data-customerId=${customer.Id}>${customer.Name}</button>`;
     }
     b.innerHTML = html;
@@ -74,7 +74,7 @@ const showDropdownCustomers = function (arrcustomers) {
   listenToDropdownCustomerBtn();
 };
 
-const showRacks = function (jsonObject) {
+const showRacks = function (arrRacks) {
   let html = `
             <div class="c-title-main-manage">
                 <p class="o-remove-margin">Rekken</p>
@@ -104,7 +104,7 @@ const showRacks = function (jsonObject) {
                     </th>
                 </tr>
   `;
-  for (let rack of jsonObject) {
+  for (let rack of arrRacks) {
     let arr = customerList.filter(function (elem) {
       return elem.Id == rack.customerId;
     });
@@ -141,7 +141,9 @@ const showRacks = function (jsonObject) {
                         )}" value="${rack.row4}">
                     </td>
                     <td>
-                        <button class="o-button-reset c-manage-button js-save-rack-button" data-rackId=${rack.rackId} data-customerId=${rack.customerId}>
+                        <button class="o-button-reset c-manage-button js-save-rack-button" data-rackId=${
+                          rack.rackId
+                        } data-customerId=${rack.customerId}>
                           <svg id="save_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                           <path id="Path_3154" data-name="Path 3154" d="M0,0H24V24H0Z" fill="none"/>
                           <path id="Path_3155" data-name="Path 3155" d="M17,3H5A2,2,0,0,0,3,5V19a2,2,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V7Zm2,16H5V5H16.17L19,7.83Zm-7-7a3,3,0,1,0,3,3A3,3,0,0,0,12,12ZM6,6h9v4H6Z" fill="#0084a4"/>
@@ -168,6 +170,20 @@ const showRacks = function (jsonObject) {
   htmlRacks.innerHTML = html;
   listenToSaveButton();
   listenToDeleteButton();
+};
+
+const showFilteredRacks = function (arrCustomers) {
+  let arrRacks = [];
+  let arrCustomerIds = [];
+  for (let customer of arrCustomers) {
+    arrCustomerIds.push(customer.Id);
+  }
+  for (let rack of customerRacks) {
+    if (arrCustomerIds.includes(rack.customerId)) {
+      arrRacks.push(rack);
+    }
+  }
+  showRacks(arrRacks);
 };
 
 //#endregion
@@ -210,7 +226,7 @@ const callbackPutRack = function (rackId, customerId) {
     Row1: row1,
     Row2: row2,
     Row3: row3,
-    Row4: row4
+    Row4: row4,
   });
   handleData(url, getRacks, callbackError, "PUT", body);
 };
@@ -218,6 +234,11 @@ const callbackPutRack = function (rackId, customerId) {
 const callbackDeleteRack = function (rackId) {
   let url = `${baseUrl}/racks/${rackId}`;
   handleData(url, getRacks, callbackError, "DELETE");
+};
+
+const callbackRacks = function (jsonObject) {
+  customerRacks = jsonObject;
+  showRacks(customerRacks);
 };
 //#endregion
 
@@ -239,7 +260,7 @@ const getEmptyRacks = function () {
 
 const getRacks = function () {
   let url = `${baseUrl}/racks`;
-  handleData(url, showRacks, callbackError, "GET");
+  handleData(url, callbackRacks, callbackError, "GET");
 };
 //#endregion
 
@@ -296,6 +317,18 @@ const listenToDeleteButton = function () {
     });
   }
 };
+
+const listenToCustomerSearch = function () {
+  htmlCustomerSearch.addEventListener("input", function () {
+    let arr = customerList.filter(function (elem) {
+      return (
+        elem.Name.includes(htmlCustomerSearch.value.toLowerCase()) ||
+        elem.Id.includes(htmlCustomerSearch.value.toLowerCase())
+      );
+    });
+    showFilteredRacks(arr);
+  });
+};
 // Event listeners
 
 //#region ***  Init / DOMContentLoaded                  ***********
@@ -303,9 +336,11 @@ const init = function () {
   console.log("DOM Content Loaded.");
   htmlEmptyRacks = document.querySelector(".js-new-racks");
   htmlRacks = document.querySelector(".js-racks");
+  htmlCustomerSearch = document.querySelector(".js-search-manage");
 
   getCustomersManage();
   getEmptyRacks();
+  listenToCustomerSearch();
 };
 
 document.addEventListener("DOMContentLoaded", init);
