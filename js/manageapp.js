@@ -335,6 +335,7 @@ const listenToDropdownCustomerBtn = function () {
       let rackId = b.getAttribute("data-rackId");
       let customerId = b.getAttribute("data-customerId");
       callbackPostCustomerId(rackId, customerId);
+      showMessage("Klant toegewezen aan rek.");
       getRacks();
     });
   }
