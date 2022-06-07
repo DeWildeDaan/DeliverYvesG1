@@ -910,6 +910,39 @@
 
   .c-dropdown-show {display: block;}
 
+/**
+  * Double up Loader
+  *
+  * @author jh3y - jhey.dev
+*/
+.c-loader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.c-double-up:before {
+    display: block;
+    content: '';
+    height: 3.125rem;
+    width: 3.125rem;
+    -webkit-animation: spin .5s infinite linear;
+    animation: spin .5s infinite linear;
+    border: 0.625rem var(--global-color-accent1) double;
+    border-left-style: solid;
+    border-radius: 100%; 
+}
+  
+  @-webkit-keyframes spin {
+    to {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg); } }
+  
+  @keyframes spin {
+    to {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg); } }
   
  /*------------------------------------*\
  #UTILITIES
