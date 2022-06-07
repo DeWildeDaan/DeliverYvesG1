@@ -265,9 +265,10 @@ const showUnavailableRacks = function () {
   }
 };
 
-const showLoader = function (htmlObject) {
+const showLoader = function () {
   let html = '<div class="c-loader c-double-up"></div>';
-  htmlObject.innerHTML = html;
+  htmlRacks.innerHTML = html;
+  htmlTitle.innerHTML = "";
 };
 //#endregion
 
@@ -361,7 +362,7 @@ const listenToCustomerButton = function () {
       let customerId = this.getAttribute("data-customerId");
       previousCustomer = this;
       selectedCustomer = customerId;
-      showLoader(htmlRacks);
+      showLoader();
       getPredictionsCustomer(customerId);
     });
   }
@@ -374,7 +375,7 @@ const listenToNext = function () {
       customerCounter = 0;
     }
     previousCustomer.classList.remove("c-customer-button_selected");
-    showLoader(htmlRacks);
+    showLoader();
     callbackGetSelectedCustomer();
   });
 };
@@ -386,7 +387,7 @@ const listenToPrevious = function () {
       customerCounter = customerList.length - 1;
     }
     previousCustomer.classList.remove("c-customer-button_selected");
-    showLoader(htmlRacks);
+    showLoader();
     callbackGetSelectedCustomer();
   });
 };

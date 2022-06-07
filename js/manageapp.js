@@ -3,9 +3,15 @@ let baseUrl =
   "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io";
 let customerList, customerRacks;
 let selectedRacks = [];
+const messageDisplayTime = 5000; //Milliseconds
 
 //#region ***  DOM references                           ***********
-let htmlEmptyRacks, htmlRacks, htmlCustomerSearch, htmlDeleteButton;
+let htmlEmptyRacks,
+  htmlRacks,
+  htmlCustomerSearch,
+  htmlDeleteButton,
+  htmlMessage,
+  htmlMessageText;
 //#endregion
 
 //#region ***  Callback-Visualisation - show___         ***********
@@ -129,9 +135,7 @@ const showRacks = function (arrRacks) {
                     <td>
                         <input class="js-chekcbox o-hide-accessible c-option c-option--hidden" type="checkbox" id="checkbox${
                           rack.rackId
-                        }" data-rackId=${
-                          rack.rackId
-                        }>
+                        }" data-rackId=${rack.rackId}>
                         <label class="c-label c-label--option c-custom-option" for="checkbox${
                           rack.rackId
                         }">
@@ -212,6 +216,15 @@ const showFilteredRacks = function (arrCustomers) {
   showRacks(arrRacks);
 };
 
+const showMessage = function (text) {
+  htmlMessageText.innerHTML = text;
+  htmlMessage.classList.add("active");
+
+  setTimeout(function () {
+    htmlMessage.classList.remove("active");
+  }, messageDisplayTime);
+};
+
 //#endregion
 
 //#region ***  Callback-No Visualisation - callback___  ***********
@@ -255,11 +268,13 @@ const callbackPutRack = function (rackId, customerId) {
     Row4: row4,
   });
   handleData(url, getRacks, callbackError, "PUT", body);
+  showMessage("Wijzigingen opgeslagen.");
 };
 
 const callbackDeleteRack = function (rackId) {
   let url = `${baseUrl}/racks/${rackId}`;
   handleData(url, getRacks, callbackError, "DELETE");
+  showMessage("Rek(ken) verwijderd.");
 };
 
 const callbackRacks = function (jsonObject) {
@@ -384,6 +399,8 @@ const init = function () {
   htmlEmptyRacks = document.querySelector(".js-new-racks");
   htmlRacks = document.querySelector(".js-racks");
   htmlCustomerSearch = document.querySelector(".js-search-manage");
+  htmlMessage = document.querySelector(".js-message");
+  htmlMessageText = document.querySelector(".js-message-text");
 
   getCustomersManage();
   getEmptyRacks();
