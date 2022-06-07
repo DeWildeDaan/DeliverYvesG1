@@ -19,7 +19,7 @@ const showEmptyRacks = function (jsonObject) {
   if (jsonObject[0]) {
     let html = `
     <div class="c-title-main-manage">
-        <p class="o-remove-margin">Nieuwe rekken</p>
+        <p class="o-remove-margin">Voeg rek toe</p>
     </div>
     <table>
         <tr>
