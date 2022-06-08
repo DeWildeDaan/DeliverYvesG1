@@ -102,7 +102,7 @@ const showSelectedCustomer = function (jsonObject) {
                             }>
                                 <p class="o-remove-margin">${
                                   rack.row1.drinks[1]
-                                    ? rack.row1.drinks[0]
+                                    ? rack.row1.drinks[1]
                                     : "Leeg"
                                 }</p>
                                 <div class="c-rack-row-icon">
@@ -148,7 +148,7 @@ const showSelectedCustomer = function (jsonObject) {
         </div>
         <div class="c-rack-row-item js-rack" data-total=${rack.row2.takenRight}>
             <p class="o-remove-margin">${
-              rack.row2.drinks[1] ? rack.row2.drinks[0] : "Leeg"
+              rack.row2.drinks[1] ? rack.row2.drinks[1] : "Leeg"
             }</p>
             <div class="c-rack-row-icon">
             <p class="o-remove-margin">${rack.row2.takenRight}</p>
@@ -191,7 +191,7 @@ const showSelectedCustomer = function (jsonObject) {
         </div>
         <div class="c-rack-row-item js-rack" data-total=${rack.row3.takenRight}>
             <p class="o-remove-margin">${
-              rack.row3.drinks[1] ? rack.row3.drinks[0] : "Leeg"
+              rack.row3.drinks[1] ? rack.row3.drinks[1] : "Leeg"
             }</p>
             <div class="c-rack-row-icon">
             <p class="o-remove-margin">${rack.row3.takenRight}</p>
@@ -234,7 +234,7 @@ const showSelectedCustomer = function (jsonObject) {
         </div>
         <div class="c-rack-row-item js-rack" data-total=${rack.row4.takenRight}>
             <p class="o-remove-margin">${
-              rack.row4.drinks[1] ? rack.row4.drinks[0] : "Leeg"
+              rack.row4.drinks[1] ? rack.row4.drinks[1] : "Leeg"
             }</p>
             <div class="c-rack-row-icon">
             <p class="o-remove-margin">${rack.row4.takenRight}</p>
