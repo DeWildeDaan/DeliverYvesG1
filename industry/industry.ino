@@ -38,7 +38,9 @@ long timer_first = 0;
 int timer_delay = 50;
 
 // Misc
+#define restock_pin 15
 bool detection = false;
+bool restocked = false;
 int selected = 0;
 
 
@@ -49,6 +51,7 @@ void setup() {
   pinMode(pin_l_trigger, OUTPUT);
   pinMode(pin_h_echo, INPUT);
   pinMode(pin_l_echo, INPUT);
+  pinMode(restock_pin, INPUT);
   
   wifiManager.setDebugOutput(true);
   std::vector<const char *> menu = {"wifi"};
@@ -62,81 +65,84 @@ void setup() {
 }
 
 void loop() {
+  int restock = digitalRead(restock_pin);
   if (WiFi.status() == WL_CONNECTED) {  
-    int h_distance;
-    int l_distance;
-    
-    if (detection) {
-      if (timer_first == 0) {
-        timer_first = millis();
+    if (restock == LOW) {
+      if (restocked == true) {
+        restocked = false;
       }
+      int h_distance;
+      int l_distance;
 
-      if (h_distance_detected != 0 && l_distance_detected != 0) {
-        h_distance = h_distance_detected;
-        l_distance = l_distance_detected;  
-
-        h_distance_detected = 0;
-        l_distance_detected = 0;
-      } else {
-        ultrasonicDistances(&h_distance, &l_distance);
-      }
-            
-      if (h_distance != 0 && l_distance != 0) {
-        timer_detection = millis();
-        ultrasonic_counter += 1;  
-
-        
-        Serial.print(h_distance);
-        Serial.print(" ");
-        Serial.println(l_distance);
-        
-        h_distance_avg += h_distance;
-        l_distance_avg += l_distance;
+      if (detection) {
+        if (timer_first == 0) {
+          timer_first = millis();
+        }
   
-        if (h_distance_min == 0) {
-          h_distance_min = h_distance; 
-        } else if (h_distance < h_distance_min) {
-          h_distance_min = h_distance; 
+        if (h_distance_detected != 0 && l_distance_detected != 0) {
+          h_distance = h_distance_detected;
+          l_distance = l_distance_detected;  
+  
+          h_distance_detected = 0;
+          l_distance_detected = 0;
+        } else {
+          ultrasonicDistances(&h_distance, &l_distance);
         }
-        if (h_distance > h_distance_max) {
-          h_distance_max = h_distance; 
+              
+        if (h_distance != 0 && l_distance != 0) {
+          timer_detection = millis();
+          ultrasonic_counter += 1;  
+          
+          h_distance_avg += h_distance;
+          l_distance_avg += l_distance;
+    
+          if (h_distance_min == 0) {
+            h_distance_min = h_distance; 
+          } else if (h_distance < h_distance_min) {
+            h_distance_min = h_distance; 
+          }
+          if (h_distance > h_distance_max) {
+            h_distance_max = h_distance; 
+          }
+          if (l_distance_min == 0) {
+            l_distance_min = l_distance; 
+          } else if (l_distance < l_distance_min) {
+            l_distance_min = l_distance; 
+          }
+          if (l_distance > l_distance_max) {
+            l_distance_max = l_distance; 
+          }
+          
+          
+        } else if (ultrasonic_counter != 0) {
+          if (millis() - timer_detection > 5000) {
+            distance_time = millis() - timer_first - 5000;
+            h_distance_avg = h_distance_avg / ultrasonic_counter;
+            l_distance_avg = l_distance_avg / ultrasonic_counter;
+            
+            digitalWrite(2, LOW);
+            detection = false;
+  
+            postData();
+            dataClear();
+           }  
+        } else {
+          if (millis() - timer_detection > 3000) {
+            digitalWrite(2, LOW);
+            detection = false;
+          }
         }
-        if (l_distance_min == 0) {
-          l_distance_min = l_distance; 
-        } else if (l_distance < l_distance_min) {
-          l_distance_min = l_distance; 
-        }
-        if (l_distance > l_distance_max) {
-          l_distance_max = l_distance; 
-        }
-        
-        
-      } else if (ultrasonic_counter != 0) {
-        if (millis() - timer_detection > 5000) {
-          distance_time = millis() - timer_first - 5000;
-          h_distance_avg = h_distance_avg / ultrasonic_counter;
-          l_distance_avg = l_distance_avg / ultrasonic_counter;
-          
-          digitalWrite(2, LOW);
-          detection = false;
-
-          
-          
-          sendData();
-          dataClear();
-
-          
-          Serial.println("Done");
-          Serial.println("");
-         }  
       } else {
-        if (millis() - timer_detection > 3000) {
-          digitalWrite(2, LOW);
-          detection = false;
-        }
+        ultrasonicDetection(&h_distance_detected, &l_distance_detected);  
       }
     } else {
-      ultrasonicDetection(&h_distance_detected, &l_distance_detected);  
+      digitalWrite(2, HIGH);
+      if (restocked == false) {
+        postRestock();
+        restocked = true;
+      }
+      delay(600);
+      digitalWrite(2, LOW);
     }
     delay(timer_delay);
   }
@@ -155,11 +161,7 @@ void dataClear() {
   ultrasonic_counter = 0;
 }
 
-void sendData(){
-      
-          Serial.println(rack_id);
-          Serial.println("");
-  
+void postData(){
       http.begin(predictionAPI);
       http.addHeader("Content-Type", "application/json");
 
@@ -178,10 +180,14 @@ void sendData(){
       serializeJson(doc, requestBody);
       int httpResponseCode = http.POST(requestBody);
       http.end();
+}
 
-      
-          Serial.println(requestBody);
-          Serial.println(httpResponseCode);
+void postRestock() {
+  if(WiFi.status()== WL_CONNECTED){
+    http.begin(restockAPI);
+    int httpResponseCode = http.GET();
+    http.end();
+  } 
 }
 
 void postRackId(){
