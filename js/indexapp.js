@@ -362,6 +362,7 @@ const listenToCustomerButton = function () {
       let customerId = this.getAttribute("data-customerId");
       previousCustomer = this;
       selectedCustomer = customerId;
+      customerCounter = customerList.findIndex(p => p.customerId == customerId);
       showLoader();
       getPredictionsCustomer(customerId);
     });
