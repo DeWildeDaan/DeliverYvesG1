@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <HX711_ADC.h>
 #include <WiFiManager.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -13,6 +14,12 @@ int ultrasonic_counter = 0;
 int h_distance_detected = 0;
 int l_distance_detected = 0;
 
+// HX711
+#define pin_hx711_dout 21
+#define pin_hx711_sck 22
+HX711_ADC loadCell(pin_hx711_dout, pin_hx711_sck);
+float prevReading = 0;
+
 // API
 int h_distance_min;
 int h_distance_max;
@@ -25,7 +32,7 @@ String rack_id = "";
 int rack_row = 3;
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 String predictionAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/predict";
-String restockAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/restock" + rack_id;
+String restockAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/restock/" + rack_id;
 String rackIdAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/racks/" + rack_id;
 
 // Wifi
@@ -34,6 +41,7 @@ HTTPClient http;
 
 // Timer
 long timer_detection;
+long timer_hx711 = 0;
 long timer_first = 0;
 int timer_delay = 50;
 
@@ -52,7 +60,7 @@ void setup() {
   pinMode(pin_h_echo, INPUT);
   pinMode(pin_l_echo, INPUT);
   pinMode(restock_pin, INPUT);
-  
+
   wifiManager.setDebugOutput(true);
   std::vector<const char *> menu = {"wifi"};
   wifiManager.setMenu(menu);
@@ -61,7 +69,7 @@ void setup() {
   rack_id = WiFi.macAddress();
   postRackId();
 
-  startupSequence();
+  //startupSequence();
 }
 
 void loop() {
@@ -78,6 +86,7 @@ void loop() {
         if (timer_first == 0) {
           timer_first = millis();
         }
+        int sum = 0;
   
         if (h_distance_detected != 0 && l_distance_detected != 0) {
           h_distance = h_distance_detected;
@@ -113,8 +122,16 @@ void loop() {
             l_distance_max = l_distance; 
           }
           
-          
         } else if (ultrasonic_counter != 0) {
+          if (millis() - timer_detection > 1000) {
+            Serial.println("R");
+            float reading = hx711Read();
+            float diff = prevReading - reading;
+            if (diff > threshold && diff < (prevReading / 8)) {
+              sum++;  
+            }
+            prevReading = reading;
+          }
           if (millis() - timer_detection > 5000) {
             distance_time = millis() - timer_first - 5000;
             h_distance_avg = h_distance_avg / ultrasonic_counter;
@@ -122,12 +139,15 @@ void loop() {
             
             digitalWrite(2, LOW);
             detection = false;
-  
-            postData();
+
+            if (sum >= 3) {
+              postData();
+            }
+            
             dataClear();
            }  
         } else {
-          if (millis() - timer_detection > 3000) {
+          if (millis() - timer_detection > 5000) {
             digitalWrite(2, LOW);
             detection = false;
           }
@@ -202,7 +222,25 @@ void postRackId(){
     serializeJson(doc, requestBody);
     int httpResponseCode = http.POST(requestBody);
     http.end();
+
+    if (httpResponseCode == 201) {
+      calibrate();
+    }
   }
+}
+
+void calibrate() {
+  loadCell.begin();
+  loadCell.start(2000, true);
+  if (loadCell.getTareTimeoutFlag() || loadCell.getSignalTimeoutFlag()) {
+    while (1);
+  } else {
+    loadCell.setCalFactor(1.0);
+  }
+  while (!loadCell.update());
+  loadCell.tareNoDelay();
+  loadCell.refreshDataSet();
+  loadCell.getNewCalibration(1.0);
 }
 
 
@@ -267,4 +305,13 @@ int ultrasonicDistance(int pin_trigger, int pin_echo) {
   int distance = duration * 0.017;
   delay(50);
   return distance;
+}
+
+float hx711Read() {
+  if (loadCell.update()) {
+    if (millis() > timer_hx711) {
+      timer_hx711 = millis();  
+      return abs(loadCell.getData());
+    }
+  }
 }
