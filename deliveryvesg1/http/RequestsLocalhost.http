@@ -37,7 +37,7 @@ POST http://localhost:3000/racks HTTP/1.1
 Content-Type: application/json
 
 {
-  "RackId":"1"
+  "RackId":"5"
 }
 ###
 
@@ -83,7 +83,7 @@ GET http://localhost:3000/restock/1 HTTP/1.1
 Content-Type: application/json
 ###
 
-DELETE http://localhost:3000/racks/1 HTTP/1.1
+DELETE http://localhost:3000/racks/5 HTTP/1.1
 Content-Type: application/json
 ###
 

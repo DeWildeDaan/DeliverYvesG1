@@ -2,7 +2,7 @@ namespace DeliverYves.Repositories;
 
 public interface IRackRespository
 {
-    Rack AddRack(Rack newRack);
+    Boolean AddRack(Rack newRack);
     string DeleteRack(string rackId);
     TableEntity RestockRack(string rackId);
     TableEntity UpdateRack(Rack newRack);
@@ -99,7 +99,7 @@ public class RackRespository : IRackRespository
 /// 
 /// Returns:
 ///   A new Rack object is being returned.
-    public Rack AddRack(Rack newRack)
+    public Boolean AddRack(Rack newRack)
     {
         TableEntity rack = GetRacksByRackId(newRack.RackId);
         if (rack == null)
@@ -117,8 +117,11 @@ public class RackRespository : IRackRespository
                 { "FilledOn", DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc) }
             };
             _tableClient.AddEntity(entity);
+            return true;
+        } else {
+            return false;
         }
-        return newRack;
+        
     }
 
 /// > Delete the rack with the specified rackId

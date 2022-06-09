@@ -111,7 +111,15 @@ into the route and the `AddRack` method is called. */
 app.MapPost("/racks", (IRackService rackService, Rack rack) =>
 {
     var results = rackService.AddRack(rack);
-    return Results.Created($"/racks", results);
+    if (results == true)
+    {
+        return Results.Created($"/racks", rack);
+    }
+    else
+    {
+        return Results.Accepted($"/racks", rack);
+    }
+
 });
 
 /* This is a route that is mapped to the `/racks` endpoint. The `rackService` is injected
