@@ -15,6 +15,11 @@ let htmlEmptyRacks,
 //#endregion
 
 //#region ***  Callback-Visualisation - show___         ***********
+/**
+ * It creates a table with empty racks and a dropdown menu to choose a customer.
+ * @param jsonObject - [{RackId: "00:00:00:00:00:00", CustomerId: "1"}, {RackId: "00:00:00:00:00:01",
+ * CustomerId: "2"}]
+ */
 const showEmptyRacks = function (jsonObject) {
   if (jsonObject[0]) {
     let html = `
@@ -73,6 +78,11 @@ const showEmptyRacks = function (jsonObject) {
   getRacks();
 };
 
+/**
+ * When the user clicks on a rack, show the dropdown for that rack and show the customers for that
+ * rack.
+ * @param rackId - the id of the rack that was clicked
+ */
 const showDropdown = function (rackId) {
   document
     .querySelector(`.js-dropdown-${rackId}`)
@@ -80,6 +90,11 @@ const showDropdown = function (rackId) {
   showDropdownCustomers(customerList);
 };
 
+/**
+ * For each button with the class js-dropdown-customers, create a button for each customer in the array
+ * arrCustomers, and add the button to the DOM.
+ * @param arrCustomers - an array of objects that contain the customer's name and id
+ */
 const showDropdownCustomers = function (arrCustomers) {
   for (const b of document.querySelectorAll(".js-dropdown-customers")) {
     let html = ``;
@@ -92,6 +107,11 @@ const showDropdownCustomers = function (arrCustomers) {
   listenToDropdownCustomerBtn();
 };
 
+/**
+ * It takes an array of racks, loops through them, and creates a table with the racks.
+ * @param arrRacks - an array of objects, each object has a rackId, customerId, row1, row2, row3, row4
+ * @returns the html string.
+ */
 const showRacks = function (arrRacks) {
   let html = `
             <div class="c-title-main-manage">
@@ -210,6 +230,10 @@ const showRacks = function (arrRacks) {
   listenToCheckBox();
 };
 
+/**
+ * It takes an array of customers and returns an array of racks that belong to those customers.
+ * @param arrCustomers - an array of customer objects
+ */
 const showFilteredRacks = function (arrCustomers) {
   let arrRacks = [];
   let arrCustomerIds = [];
@@ -224,6 +248,11 @@ const showFilteredRacks = function (arrCustomers) {
   showRacks(arrRacks);
 };
 
+/**
+ * It takes a string as an argument, displays it in the message box, and then removes the message after
+ * a set amount of time
+ * @param text - The text to display in the message.
+ */
 const showMessage = function (text) {
   htmlMessageText.innerHTML = text;
   htmlMessage.classList.add("active");
@@ -236,14 +265,29 @@ const showMessage = function (text) {
 //#endregion
 
 //#region ***  Callback-No Visualisation - callback___  ***********
+/**
+ * It takes a JSON object as an argument and logs it to the console.
+ * @param jsonObject - The JSON object returned by the server.
+ */
 const callbackError = function (jsonObject) {
   console.log(jsonObject);
 };
 
+/**
+ * The callbackCustomersManage function is a callback function that is called when the JSON data is
+ * loaded.
+ * @param jsonObject - The JSON object returned from the server.
+ */
 const callbackCustomersManage = function (jsonObject) {
   customerList = jsonObject;
 };
 
+/**
+ * It takes a rackId and a customerId, and then it makes a PUT request to the server with the rackId
+ * and customerId in the body of the request.
+ * @param rackId - the id of the rack that the customer is going to be assigned to
+ * @param customerId - the customer id
+ */
 const callbackPostCustomerId = function (rackId, customerId) {
   let url = `${baseUrl}/racks`;
   const body = JSON.stringify({
@@ -253,6 +297,11 @@ const callbackPostCustomerId = function (rackId, customerId) {
   handleData(url, getEmptyRacks, callbackError, "PUT", body);
 };
 
+/**
+ * It takes the values from the input fields and sends them to the server.
+ * @param rackId - "1:1"
+ * @param customerId - "1"
+ */
 const callbackPutRack = function (rackId, customerId) {
   let row1 = document
     .querySelector(`.js-row1-${rackId.replaceAll(":", "-")}`)
@@ -279,12 +328,21 @@ const callbackPutRack = function (rackId, customerId) {
   showMessage("Wijzigingen opgeslagen.");
 };
 
+/**
+ * It deletes a rack from the database and then calls the function getRacks to update the page
+ * @param rackId - the id of the rack to be deleted
+ */
 const callbackDeleteRack = function (rackId) {
   let url = `${baseUrl}/racks/${rackId}`;
   handleData(url, getRacks, callbackError, "DELETE");
   showMessage("Rek(ken) verwijderd.");
 };
 
+/**
+ * The callbackRacks function takes a JSON object as an argument and assigns it to the customerRacks
+ * variable. Then it calls the showRacks function and passes the customerRacks variable to it.
+ * @param jsonObject - The JSON object that is returned from the server.
+ */
 const callbackRacks = function (jsonObject) {
   customerRacks = jsonObject;
   showRacks(customerRacks);
@@ -292,6 +350,10 @@ const callbackRacks = function (jsonObject) {
 //#endregion
 
 //#region ***  Data Access - get___                     ***********
+/**
+ * It gets the customers from the database and then calls the callbackCustomersManage function with the
+ * customers as a parameter.
+ */
 const getCustomersManage = function () {
   //In realiteit spreek je de klantendatabase aan
   let customers = [
@@ -302,11 +364,18 @@ const getCustomersManage = function () {
   callbackCustomersManage(customers);
 };
 
+/**
+ * This function gets the empty racks from the database and displays them on the page.
+ */
 const getEmptyRacks = function () {
   let url = `${baseUrl}/nocustomer`;
   handleData(url, showEmptyRacks, callbackError, "GET");
 };
 
+/**
+ * This function gets the racks from the server and then calls the callbackRacks function with the data
+ * returned from the server.
+ */
 const getRacks = function () {
   let url = `${baseUrl}/racks`;
   handleData(url, callbackRacks, callbackError, "GET");
@@ -314,6 +383,10 @@ const getRacks = function () {
 //#endregion
 
 //#region ***  Event Listeners - listenTo___            ***********
+/**
+ * When the user clicks on the button, get the rackId from the button and pass it to the showDropdown
+ * function.
+ */
 const listenToChooseCustomerButton = function () {
   for (const b of document.querySelectorAll(".js-choose-customer")) {
     b.addEventListener("click", function () {
@@ -323,6 +396,11 @@ const listenToChooseCustomerButton = function () {
   }
 };
 
+/**
+ * When the user types in the input field, filter the customerList array and show the results in the
+ * dropdown.
+ * @returns the filtered array.
+ */
 const listenToDropdownSearch = function () {
   for (const b of document.querySelectorAll(".js-dropdown-search")) {
     b.addEventListener("input", function () {
@@ -337,6 +415,11 @@ const listenToDropdownSearch = function () {
   }
 };
 
+/**
+ * When a button is clicked, get the rackId and customerId from the button, then call the
+ * callbackPostCustomerId function with the rackId and customerId as parameters, then show a message,
+ * then call the getRacks function.
+ */
 const listenToDropdownCustomerBtn = function () {
   for (const b of document.querySelectorAll(".js-dropdown-customer-btn")) {
     b.addEventListener("click", function () {
@@ -349,6 +432,10 @@ const listenToDropdownCustomerBtn = function () {
   }
 };
 
+/**
+ * When the save button is clicked, get the rackId and customerId from the button's data attributes and
+ * pass them to the callbackPutRack function.
+ */
 const listenToSaveButton = function () {
   for (const b of document.querySelectorAll(".js-save-rack-button")) {
     b.addEventListener("click", function () {
@@ -359,6 +446,10 @@ const listenToSaveButton = function () {
   }
 };
 
+/**
+ * When a checkbox is checked, add the rackId to the selectedRacks array, and if the checkbox is
+ * unchecked, remove the rackId from the selectedRacks array.
+ */
 const listenToCheckBox = function () {
   for (const b of document.querySelectorAll(".js-chekcbox")) {
     b.addEventListener("change", function () {
@@ -380,6 +471,9 @@ const listenToCheckBox = function () {
   }
 };
 
+/**
+ * When the delete button is clicked, for each selected rack, call the callbackDeleteRack function.
+ */
 const listenToDeleteButton = function () {
   htmlDeleteButton.addEventListener("click", function () {
     for (let rackId of selectedRacks) {
@@ -388,6 +482,11 @@ const listenToDeleteButton = function () {
   });
 };
 
+/**
+ * When the user types something in the search box, filter the customerList array and show the filtered
+ * results in the table.
+ * @returns The filtered array of customers.
+ */
 const listenToCustomerSearch = function () {
   htmlCustomerSearch.addEventListener("input", function () {
     let arr = customerList.filter(function (elem) {
@@ -403,6 +502,10 @@ const listenToCustomerSearch = function () {
 // Event listeners
 
 //#region ***  Init / DOMContentLoaded                  ***********
+/**
+ * The init function is called when the DOM content is loaded, and it gets the customers, empty racks,
+ * and listens to the customer search.
+ */
 const init = function () {
   console.log("DOM Content Loaded.");
   htmlEmptyRacks = document.querySelector(".js-new-racks");

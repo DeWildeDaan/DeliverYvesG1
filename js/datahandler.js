@@ -1,5 +1,16 @@
 "use strict";
 
+/**
+ * It fetches data from a given url, and then calls a callback function with the data as a parameter
+ * @param url - the url to fetch
+ * @param callbackFunctionName - the function that will be called when the data is received
+ * @param [callbackErrorFunctionName=null] - the function that will be called when the response is not
+ * ok
+ * @param [method=GET] - GET, POST, PUT, DELETE
+ * @param [body=null] - the body of the request, if any
+ * @returns The function handleData is being returned.
+ */
+
 const handleData = function (
   url,
   callbackFunctionName,
