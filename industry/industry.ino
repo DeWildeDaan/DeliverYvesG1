@@ -7,8 +7,8 @@
 // Ultrasonic
 #define pin_h_trigger 27
 #define pin_h_echo 26
-#define pin_l_trigger 13
-#define pin_l_echo 12
+#define pin_l_trigger 33
+#define pin_l_echo 32
 int ultrasonic_threshold = 0;
 int ultrasonic_counter = 0;
 int h_distance_detected = 0;
@@ -19,6 +19,7 @@ int l_distance_detected = 0;
 #define pin_hx711_sck 22
 HX711_ADC loadCell(pin_hx711_dout, pin_hx711_sck);
 float prevReading = 0;
+int sum = 0;
 
 // API
 int h_distance_min;
@@ -32,7 +33,7 @@ String rack_id = "";
 int rack_row = 3;
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 String predictionAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/predict";
-String restockAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/restock/" + rack_id;
+String restockAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/restock/";
 String rackIdAPI = "https://deliveryevesg1minimalapi.livelygrass-d3385627.northeurope.azurecontainerapps.io/racks/" + rack_id;
 
 // Wifi
@@ -61,15 +62,21 @@ void setup() {
   pinMode(pin_l_echo, INPUT);
   pinMode(restock_pin, INPUT);
 
+  loadCell.begin();
+  loadCell.start(2000, true);
+
+  rack_id = WiFi.macAddress();
+
   wifiManager.setDebugOutput(true);
   std::vector<const char *> menu = {"wifi"};
   wifiManager.setMenu(menu);
   wifiManager.setHostname("DeliverYvesRek");
   wifiManager.autoConnect("DeliverYvesRek");
-  rack_id = WiFi.macAddress();
+  
   postRackId();
+  restockAPI = restockAPI + rack_id;
 
-  //startupSequence();
+  startupSequence();
 }
 
 void loop() {
@@ -86,7 +93,7 @@ void loop() {
         if (timer_first == 0) {
           timer_first = millis();
         }
-        int sum = 0;
+        
   
         if (h_distance_detected != 0 && l_distance_detected != 0) {
           h_distance = h_distance_detected;
@@ -99,6 +106,7 @@ void loop() {
         }
               
         if (h_distance != 0 && l_distance != 0) {
+          Serial.println(h_distance);
           timer_detection = millis();
           ultrasonic_counter += 1;  
           
@@ -124,13 +132,21 @@ void loop() {
           
         } else if (ultrasonic_counter != 0) {
           if (millis() - timer_detection > 1000) {
-            Serial.println("R");
-            float reading = hx711Read();
+            float reading = readScale();
+                          Serial.println(prevReading);
+                          Serial.println(reading);
+
             float diff = prevReading - reading;
-            if (diff > threshold && diff < (prevReading / 8)) {
-              sum++;  
-            }
-            prevReading = reading;
+                          Serial.println(diff);
+                          Serial.println("---------");
+
+    if(diff < -20.0){
+                  prevReading = reading;
+
+      sum++;
+    } else {
+      prevReading = reading;
+    }
           }
           if (millis() - timer_detection > 5000) {
             distance_time = millis() - timer_first - 5000;
@@ -139,12 +155,15 @@ void loop() {
             
             digitalWrite(2, LOW);
             detection = false;
-
-            if (sum >= 3) {
-              postData();
+            Serial.println(sum);
+            if (sum >= 10) {
+                postData();
+                Serial.println("Post");
+                sum = 0;
             }
             
             dataClear();
+            Serial.println("Clear");
            }  
         } else {
           if (millis() - timer_detection > 5000) {
@@ -159,12 +178,29 @@ void loop() {
       digitalWrite(2, HIGH);
       if (restocked == false) {
         postRestock();
+        //calibrate();
         restocked = true;
       }
       delay(600);
       digitalWrite(2, LOW);
     }
     delay(timer_delay);
+  }
+}
+
+unsigned long t = 0;
+
+float readScale(){
+  static boolean newDataReady = 0;
+  const int serialPrintInterval = 0;
+  if (loadCell.update()) newDataReady = true;
+  if (newDataReady) {
+    if (millis() > t + serialPrintInterval) {
+      float i = loadCell.getData();
+      newDataReady = 0;
+      t = millis();
+      return abs(i);
+    }
   }
 }
 
@@ -205,8 +241,11 @@ void postData(){
 void postRestock() {
   if(WiFi.status()== WL_CONNECTED){
     http.begin(restockAPI);
+    Serial.println(restockAPI);
     int httpResponseCode = http.GET();
     http.end();
+    Serial.println(httpResponseCode);
+    Serial.println("Restock done");
   } 
 }
 
@@ -222,25 +261,20 @@ void postRackId(){
     serializeJson(doc, requestBody);
     int httpResponseCode = http.POST(requestBody);
     http.end();
-
-    if (httpResponseCode == 201) {
-      calibrate();
-    }
+    calibrate();
   }
 }
 
 void calibrate() {
-  loadCell.begin();
-  loadCell.start(2000, true);
   if (loadCell.getTareTimeoutFlag() || loadCell.getSignalTimeoutFlag()) {
     while (1);
   } else {
-    loadCell.setCalFactor(1.0);
+    loadCell.setCalFactor(10.0);
   }
   while (!loadCell.update());
   loadCell.tareNoDelay();
   loadCell.refreshDataSet();
-  loadCell.getNewCalibration(1.0);
+  loadCell.getNewCalibration(10.0);
 }
 
 
@@ -292,6 +326,7 @@ void startupSequence() {
     delay(80);
   }
   ultrasonic_threshold = ((threshold_h + threshold_l) / 2) - 5;
+  Serial.println(ultrasonic_threshold);
 }
 
 int ultrasonicDistance(int pin_trigger, int pin_echo) {
@@ -305,13 +340,4 @@ int ultrasonicDistance(int pin_trigger, int pin_echo) {
   int distance = duration * 0.017;
   delay(50);
   return distance;
-}
-
-float hx711Read() {
-  if (loadCell.update()) {
-    if (millis() > timer_hx711) {
-      timer_hx711 = millis();  
-      return abs(loadCell.getData());
-    }
-  }
 }
