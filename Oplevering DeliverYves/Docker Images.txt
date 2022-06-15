@@ -1,0 +1,8 @@
+Minimal API:
+docker pull ghcr.io/dewildedaan/deliveryvesg1minimalapi:MINIMALAPI
+
+Fast APi:
+docker pull ghcr.io/dewildedaan/deliveryvesg1fastapi:FastAPI
+
+Frontend:
+docker pull ghcr.io/dewildedaan/deliveryvesg1frontend:FrontEnd
